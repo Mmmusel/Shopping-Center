@@ -76,8 +76,8 @@ export default new Router({
             component: () => import('@/view/business/business'),
             children: [
                 {
-                    path : 'home',
-                    component: () => import('@/view/business/business_home')
+                    path : '',
+                    component: () => import('@/view/business/business_order')
                 },
                 {
                     path : 'order',
@@ -93,7 +93,7 @@ export default new Router({
                 },
                 {
                     path : 'saledata',
-                    component: () => import('@/view/business/business_home')
+                    component: () => import('@/view/business/business_saledata')
                 },
                 {
                     path : 'information',

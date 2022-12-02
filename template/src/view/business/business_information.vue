@@ -71,19 +71,23 @@
                           </v-col>
                         </v-row>
                         <v-row>
-                          <v-col md="12">
-                            <region-selects
-                              v-model="region"
-                              @change="selectLogs"
-                            />
-
-                            <v-text-field
+                          <v-card>
+                            <v-col>
+                              收货地址
+                              <region-selects
+                                v-model="region"
+                                @change="selectLogs"
+                              />
+                            </v-col>
+                            <v-col>
+                              <v-text-field
                                 label="详细地址"
                                 :rules="profileRules.user_address"
                                 v-model="profileForm.user_address"
                                 clearable
-                            />
-                          </v-col>
+                              />
+                            </v-col>
+                          </v-card>
                         </v-row>
                       </v-container>
                     </v-form>
@@ -223,10 +227,7 @@ export default {
     return {
       //alert: false,
       cardlines: [
-        {
-          icon:"mdi-cart-arrow-up",
-          text:"111",
-        }
+
       ],
       tabItems: [
         {tab: "profile", content: "个人设置"},
@@ -312,7 +313,7 @@ export default {
 
       this.cardlines = [
         {
-          icon:"mdi-cart-arrow-up",
+          icon:"mdi-account",
           text:this.userInfo.user_name,
         },
 

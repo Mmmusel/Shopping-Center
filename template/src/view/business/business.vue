@@ -73,8 +73,7 @@ export default {
 
   data: () => ({
     drawer: null,
-    links:[{ text: '主页', icon: 'mdi-inbox-arrow-down',route:"/business/home"},
-      { text: '订单信息', icon: 'mdi-inbox-arrow-down',route:"/business/order"},
+    links:[{ text: '订单信息', icon: 'mdi-inbox-arrow-down',route:"/business/order"},
       { text: '上架商品', icon: 'mdi-send',route:"/business/commodity"},
       { text: '销售数据', icon: 'mdi-delete',route:"/business/saledata"},
       { text: '店铺信息', icon: 'mdi-alert-octagon',route:"/business/information"},],
