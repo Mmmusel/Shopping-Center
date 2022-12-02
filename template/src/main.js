@@ -4,14 +4,16 @@ import vuetify from './plugins/vuetify'
 import router from './router/index'
 //import router from './router/index' //导入刚刚在route文件下定义的router
 import store from './components/customer/store'
+import Region from 'v-region'
 import ElementUI from "element-ui";
 import 'element-ui/lib/theme-chalk/index.css'
+import '@mdi/font/css/materialdesignicons.css'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
-
+Vue.use(Region)
 
 new Vue({
   vuetify,

@@ -85,7 +85,11 @@ export default new Router({
                 },
                 {
                     path : 'commodity',
-                    component: () => import('@/view/business/business_commodity')
+                    component: () => import('@/view/business/business_commodity'),
+                },
+                {
+                    path : 'commodity/add_commodity',
+                    component: () => import('@/view/business/business_add_commodity'),
                 },
                 {
                     path : 'saledata',

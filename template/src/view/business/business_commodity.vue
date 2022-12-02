@@ -109,6 +109,13 @@
         </template>
       </v-data-iterator>
     </v-container>
+    <v-btn
+      class="ma-2"
+      color="success"
+      @click="addCommodity"
+    >
+      添加商品
+    </v-btn>
   </div>
 </template>
 
@@ -207,6 +214,10 @@ export default {
             console.log(error);
         });
     },
+
+    addCommodity() {
+      this.$router.push({path: '/business/commodity/add_commodity'})
+    }
   },
   async created(){
 

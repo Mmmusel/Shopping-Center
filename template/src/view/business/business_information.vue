@@ -72,8 +72,13 @@
                         </v-row>
                         <v-row>
                           <v-col md="12">
+                            <region-selects
+                              v-model="region"
+                              @change="selectLogs"
+                            />
+
                             <v-text-field
-                                label="地址"
+                                label="详细地址"
                                 :rules="profileRules.user_address"
                                 v-model="profileForm.user_address"
                                 clearable
@@ -90,7 +95,7 @@
                     />-->
 
                     <el-form ref="form" :model="profileForm" label-width="80px">
-                      <el-form-item label="商品图片">
+                      <el-form-item label="头像">
                         <input type="file" @change="getImageFile" id="img">
                         <img :src="profileForm.user_avatar"/>
                       </el-form-item>
@@ -207,12 +212,13 @@ import {
 
 //import AvatarUpload from "@/components/business/AvatarUpload";
 import {required} from "@/utils/widget";
+import { RegionSelects } from 'v-region'
 
 export default {
   name: "business_information",
-  //components: {
-  //  AvatarUpload,
- // },
+  components: {
+    RegionSelects,
+  },
   data() {
     return {
       //alert: false,
@@ -445,6 +451,13 @@ export default {
           });*/
       }
     },
+
+    // Responding to data changes
+    // 地址选择器
+    regionChange (data) {
+      console.log(data)
+    },
+
     passwordUpate() {
       if (this.$refs.passwordForm.validate()) {
         updatePassword(this.passwordForm).catch((err) => {
