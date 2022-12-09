@@ -31,6 +31,23 @@
               </div>
               <v-divider/>
             </div>
+
+
+            <div class="py-2">
+                <v-icon small left> mdi-email
+                </v-icon
+                >
+                <region-text
+                  separator="-"
+                  :town="false"
+                  v-model="userInfo.user_selectAddress"
+                />
+
+              </div>
+              <v-divider/>
+
+
+
             <div class="mb-3"></div>
           </v-card-text>
         </v-card>
@@ -75,14 +92,20 @@
                             <v-col>
                               收货地址
                               <region-selects
+
+
                                 v-model="region"
+                                :town="false"
+
+
                                 @change="selectLogs"
+                                clearable
                               />
                             </v-col>
                             <v-col>
                               <v-text-field
                                 label="详细地址"
-                                :rules="profileRules.user_address"
+                                :rules="profileRules.user_email"
                                 v-model="profileForm.user_address"
                                 clearable
                               />
@@ -101,7 +124,8 @@
                     <el-form ref="form" :model="profileForm" label-width="80px">
                       <el-form-item label="头像">
                         <input type="file" @change="getImageFile" id="img">
-                        <img :src="profileForm.user_avatar"/>
+
+                        <img :src="showImage"  height="150px" width="150px">
                       </el-form-item>
                       <el-form-item>
                         <el-button type="primary" @click="onSubmit">确认添加</el-button>
@@ -217,15 +241,25 @@ import {
 //import AvatarUpload from "@/components/business/AvatarUpload";
 import {required} from "@/utils/widget";
 import { RegionSelects } from 'v-region'
+import { RegionText } from 'v-region'
+
 
 export default {
   name: "business_information",
   components: {
     RegionSelects,
+    RegionText
   },
   data() {
     return {
       //alert: false,
+      showImage:"",
+      region:{
+        province: '350000',
+        city: '350100',
+        area: '350104',
+        town:''
+      },
       cardlines: [
 
       ],
@@ -237,6 +271,12 @@ export default {
       userInfo: {
         user_name: "",
         user_mobile: "",
+        user_selectAddress:{
+          province: '',
+          city: '',
+          area: '',
+          town: ''
+      },
         user_address: "",
         user_avatar: "",
         user_createtime: ""
@@ -259,6 +299,7 @@ export default {
           },
         ],
         user_email: [required("地址")],
+
       },
       passwordForm: {
         oldPassword: "",
@@ -270,6 +311,9 @@ export default {
         newPassword: [required("密码")],
         confirmPassword: [required("密码")],
       },
+      addrSelectRules:""
+
+
     };
   },
 
@@ -278,6 +322,7 @@ export default {
     await this.initBaseInfo();
     //this.initAccessLogs();
     this.initPasswordRules();
+    console.log(this.region)
   },
   methods: {
 
@@ -291,19 +336,29 @@ export default {
               user_mobile: response.data.user_mobile,
               user_address: response.data.user_address,
               user_avatar: (ttt!=="")?'http://127.0.0.1:8000/media/'+ttt:'',
-              user_createtime: response.data.user_createtime
+              user_createtime: response.data.user_createtime,
+              user_selectAddress:{
+          province: response.data.user_province,
+          city:response.data.user_city,
+          area: response.data.user_area,
+          town: ''
+      },
             }
+            this.showImage = (ttt!=="")?'http://127.0.0.1:8000/media/'+ttt:''
         })
         .catch(function (error) {
             console.log(error);
         });
     },
     resetProfile() {
+       this.region=this.userInfo.user_selectAddress,
       this.profileForm = {
         user_name: this.userInfo.user_name,
         user_mobile: this.userInfo.user_mobile,
         user_address: this.userInfo.user_address,
-        user_avatar:   this.userInfo.user_avatar
+        user_avatar:   this.userInfo.user_avatar,
+
+
       };
     },
     async initBaseInfo() {
@@ -321,13 +376,15 @@ export default {
           icon: "mdi-cellphone",
           text: this.userInfo.user_mobile,
         },
-          {
-          icon: "mdi-email",
-          text: this.userInfo.user_address,
-        },
+
         {
           icon: "mdi-update",
           text: `加入于 ${this.userInfo.user_createtime}`
+        },
+
+        {
+          icon: "mdi-email",
+          text: this.userInfo.user_address,
         }
         /*{
           icon: "mdi-account-multiple",
@@ -369,9 +426,22 @@ export default {
         }
       })
     },*/
+    selectLogs:async function (e){
+      console.log(e)
+      console.log(this.region.city)
+
+      await this.checkSelectAddr()
+    },
 
     getImageFile:function(e) {
        this.profileForm.user_avatar = e.target.files[0];
+      let img = new FileReader();
+      img.readAsDataURL(this.profileForm.user_avatar);
+      console.log("img:",img)
+      img.onload = ({ target }) => {
+        this.showImage = target.result; //将img转化为二进制数据
+        console.log("target:",target)
+      };
     },
     async onSubmit(){
       console.log("good");
@@ -413,7 +483,16 @@ export default {
         formData.append('user_id',blob2)
         console.log("blob2")
         console.log(blob2)
-        console.log(JSON.stringify((this.$store.state.userId)))
+        console.log(JSON.stringify((this.$store.state.user_id)))
+
+
+
+        const json3 = JSON.stringify(this.region);
+        const blob3 = new Blob([json3], {
+          type: 'application/json'
+        });
+
+        formData.append('selectAddr',blob3)
 
 
 
@@ -425,6 +504,7 @@ export default {
           console.log(formData.get('forms'))
         if(response.data.msg==="success"){
           this.userInfo.user_avatar = 'http://127.0.0.1:8000/media/'+response.data.image
+          this.showImage = 'http://127.0.0.1:8000/media/'+response.data.image
           console.log(response)
 
           }
@@ -469,6 +549,24 @@ export default {
       }
     },
 
+    checkaddr() {
+      /*const _this = this;
+      const getField = function () {
+        console.log(_this.region)
+        console.log(_this.region.city)
+        return _this.region.city;
+      };
+      console.log(getField())
+      if(!getField()) return "错"
+      console.log("tttttt")
+      return true*/
+      console.log("tttttt")
+      console.log(this.region.area)
+      if(!this.region.area) return "下拉选择省市区"
+console.log("fffffftt")
+      return true
+    },
+
     checkNewPassword(passwordFormfield) {
       const _this = this;
       const getField = function () {
@@ -492,7 +590,41 @@ export default {
         return checkResult || `两次输入的密码不一致`;
       };
     },
+
+    async checkSelectAddr(){
+      this.profileRules = {
+        user_name: [required("用户名")],
+        user_mobile: [
+          required("手机号码"),
+          function (v) {
+            return /^1[3456789]\d{9}$/.test(v) || `手机号码格式错误`;
+          },
+        ],
+        user_email: [required("地址"),
+        this.checkaddr(),
+
+        ]
+
+      }
+    },
+
     initPasswordRules() {
+
+      this.profileRules = {
+        user_name: [required("用户名")],
+        user_mobile: [
+          required("手机号码"),
+          function (v) {
+            return /^1[3456789]\d{9}$/.test(v) || `手机号码格式错误`;
+          },
+        ],
+        user_email: [required("地址"),
+        this.checkaddr(),
+
+        ],
+
+      },
+
       this.passwordRules.newPassword = [
         required("新密码"),
         this.checkNewPassword("confirmPassword"),

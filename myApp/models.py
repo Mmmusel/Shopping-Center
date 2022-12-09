@@ -11,10 +11,15 @@ class UserInfo(models.Model):
 
     user_type = models.CharField(max_length=10,null=True)
 
-    user_address = models.CharField(max_length=64,unique=True,null=True)
-    user_mobile = models.CharField(max_length=64, unique=True,null=True)
+    user_address = models.CharField(max_length=64,null=True)
+    user_mobile = models.CharField(max_length=64, null=True)
     user_avatar = models.ImageField(upload_to="user_avatar/",null=True)
     user_createtime = models.DateField(auto_now_add=True,null=True)
+
+    user_province = models.CharField(max_length=16,null=True)
+    user_city = models.CharField(max_length=16, null=True)
+    user_area = models.CharField(max_length=16, null=True)
+
 
 class OrderInfo(models.Model):
     customer_id = models.ForeignKey("UserInfo", related_name='customer',on_delete=models.CASCADE)

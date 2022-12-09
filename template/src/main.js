@@ -9,6 +9,9 @@ import ElementUI from "element-ui";
 import 'element-ui/lib/theme-chalk/index.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+import { RegionSelects } from 'v-region'
+
+Vue.component('v-region-selects', RegionSelects)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 

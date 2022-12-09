@@ -53,6 +53,22 @@ const widgetProcessor = {
       dense: true,
     };
   },
+  "v-region": (widget) => {
+    return {
+      ...widget,
+      key: widget.key,
+      label: widget.text,
+      items: widget.model,
+      "x-samll": true,
+      "item-text": "label",
+      "item-value": "value",
+      "small-chips": true,
+      multiple: widget.multiple,
+      dense: true,
+      widgetName: "v-autocomplete",
+      clearable: true,
+    };
+  },
   //文办控件
   "v-textarea": (widget) => {
     return {
@@ -87,10 +103,8 @@ export const validatorAdapter = (editField) => {
   const validators = {
     //必填项
     required: required(editField.text),
-    //手机号码
-    phone: function(v) {
-      return /^1[3456789]\d{9}$/.test(v) || `${editField.text}格式错误`;
-    },
+    trigger:'blur'
+
   };
 
   return editField.rules.map((ruleName) => validators[ruleName]);

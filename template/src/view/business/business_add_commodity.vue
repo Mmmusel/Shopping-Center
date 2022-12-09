@@ -24,6 +24,18 @@
                       <v-col md="12">
                         <v-text-field
                             label="商品名"
+                            :rules="formEmptyRule"
+                            v-model="productForm.product_name"
+                            clearable
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col md="12">
+                        <v-text-field
+                            label="商品品牌"
+                            :rules="formEmptyRule"
+                            v-model="productForm.product_brand"
                             clearable
                         />
                       </v-col>
@@ -32,55 +44,51 @@
                       <v-col md="12">
                         <v-text-field
                             label="商品颜色"
+                            :rules="formEmptyRule"
+                            v-model="productForm.product_color"
                             clearable
                         />
                       </v-col>
                     </v-row>
-                    <v-row>
-                      <v-col md="12">
-                        <v-text-field
-                            label="商品进价"
-                            clearable
-                        />
-                      </v-col>
-                    </v-row>
+
                     <v-row>
                       <v-col md="12">
                         <v-text-field
                             label="商品售价"
+                            :rules="costRule"
+                            v-model="productForm.product_cost"
                             clearable
                         />
                       </v-col>
                     </v-row>
+                    <!--
                     <v-row>
                       <v-col md="12">
                         <v-text-field
                             label="商品库存"
+                            :rules="formEmptyRule"
                             clearable
                         />
                       </v-col>
                     </v-row>
+                    !-->
                   </v-container>
                 </v-form>
               </v-col>
               <v-col md="6">
                 <el-form ref="form" :model="productForm" label-width="80px">
                   <el-form-item label="主页图片">
-                    <input type="file" @change="getImageFile" id="img">
-                    <img :src="productForm.product_image"/>
+                    <input type="file" @change="getImageFile1" id="img">
+                    <img :src="showPic1" height="150px" width="150px"/>
                   </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="onSubmit">确认添加</el-button>
-                  </el-form-item>
+
                 </el-form>
                 <el-form ref="form" :model="productForm" label-width="80px">
                   <el-form-item label="细节图片">
-                    <input type="file" @change="getImageFile" id="img">
-                    <img :src="productForm.product_image"/>
+                    <input type="file" @change="getImageFile2" id="img">
+                    <img :src="showPic2" height="150px" width="150px"/>
                   </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="onSubmit">确认添加</el-button>
-                  </el-form-item>
+
                 </el-form>
               </v-col>
             </v-row>
@@ -92,7 +100,7 @@
                     tile
                     class="mr-2"
                     color="primary"
-                    @click="saveProfile"
+                    @click="saveProduct"
                 >
                   添加
                 </v-btn>
@@ -105,7 +113,10 @@
   </div>
 </template>
 
+
 <script>
+import {required} from "@/utils/widget";
+
 export default {
   name: "business_add_commodity",
   data() {
@@ -114,25 +125,110 @@ export default {
         product_name: "", // 商品名
         product_color: "", // 商品颜色
         // TODO：商品进价/商品售价
-        product_stock: "", // 商品库存
-        product_image: "", // 主页图片
+        product_brand: "", // 商品库存
+        product_cost: "", // 商品库存
+        product_image1: "", // 主页图片
+        product_image2: ""
         // TODO：细节图片
       },
+      showPic1:"",
+      showPic2:"",
+      formEmptyRule: [required("此栏目")],
+      costRule:[required("此栏目"),
+          function (v) {
+            return  /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/.test(v) || `金额最多两位小数`;
+          }
+      ]
 
     };
   },
 
   methods: {
     // TODO：保存商品信息
-    saveProduct() {
+    async saveProduct() {
+      let formData = new FormData();
+        formData.append('product_image1', this.productForm.product_image1);
+        formData.append('product_image2', this.productForm.product_image2);
+
+        const json = JSON.stringify(this.productForm);
+        const blob = new Blob([json], {
+          type: 'application/json'
+        });
+
+        formData.append('forms',blob)
+
+        const json2 = JSON.stringify((this.$store.state.userId));
+        const blob2 = new Blob([json2], {
+          type: 'application/json'
+        });
+
+        formData.append('user_id',blob2)
+        console.log("blob2")
+        console.log(blob2)
+        console.log(JSON.stringify((this.$store.state.user_id)))
+
+        var configs = {
+          headers:{'Content-Type':'multipart/form-data'}
+        }
+
+        await this.axios.post('add_product/',formData, configs).then(response => {
+          console.log(formData.get('forms'))
+        if(response.data.msg==="success"){
+          //this.showPic1 = 'http://127.0.0.1:8000/media/'+response.data.image1
+          //this.showPic2 = 'http://127.0.0.1:8000/media/'+response.data.image2
+          console.log(response)
+
+
+
+
+          window.location.href = '/#/business/commodity';
+          window.alert("商品成功上架")
+
+          }
+        console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 
     },
-    getImageFile:function(e) {
-      this.productForm.product_image = e.target.files[0];
+    getImageFile1:function(e) {
+       this.productForm.product_image1 = e.target.files[0];
+      let img = new FileReader();
+      img.readAsDataURL(this.productForm.product_image1);
+      console.log("img:",img)
+      img.onload = ({ target }) => {
+        this.showPic1 = target.result; //将img转化为二进制数据
+        console.log("target:",target)
+      };
+    },
+    getImageFile2:function(e) {
+       this.productForm.product_image2 = e.target.files[0];
+      let img = new FileReader();
+      img.readAsDataURL(this.productForm.product_image2);
+      console.log("img:",img)
+      img.onload = ({ target }) => {
+        this.showPic2 = target.result; //将img转化为二进制数据
+        console.log("target:",target)
+      };
     },
     async onSubmit(){
       console.log("good");
     },
+    clear(){
+      this.productForm={
+        product_name: "", // 商品名
+        product_color: "", // 商品颜色
+        // TODO：商品进价/商品售价
+        product_brand: "", // 商品库存
+        product_cost: "", // 商品库存
+        product_image1: "", // 主页图片
+        product_image2: ""
+        // TODO：细节图片
+      },
+      this.showPic1="",
+      this.showPic2=""
+    }
   },
 };
 </script>

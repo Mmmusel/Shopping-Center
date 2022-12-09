@@ -32,6 +32,24 @@
                 md="4"
                 lg="3"
             >
+
+              <Customer_Product  :info="item" :key="item.fields.id"></Customer_Product>
+
+              </v-col>
+          </v-row>
+        </template>
+
+<!--
+        <template v-slot:default="props">
+          <v-row>
+            <v-col
+                v-for="item in props.items"
+                :key="item.fields.product_name"
+                cols="12"
+                sm="6"
+                md="4"
+                lg="3"
+            >
               <v-card>
                 <v-card-title class="subheading font-weight-bold">{{ item.fields.product_name }}</v-card-title>
 
@@ -50,6 +68,7 @@
             </v-col>
           </v-row>
         </template>
+        -->
 
         <template v-slot:footer>
           <v-row class="mt-2" align="center" justify="center">
@@ -120,8 +139,14 @@
 </template>
 
 <script>
+import Customer_Product from "@/components/customer/customer_product";
+
 export default {
   name: "business_commodity",
+  components:{
+
+    Customer_Product
+  },
   data () {
     return {
       itemsPerPageArray: [4, 8, 12],
@@ -229,3 +254,4 @@ export default {
   }
 }
 </script>
+
