@@ -15,6 +15,13 @@ Vue.component('v-region-selects', RegionSelects)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+Vue.filter('format', function(date) {
+    //var json_date = new Date(date).toJSON();
+    //return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    return date.replace(/T/g, ' ').replace(/\.[\d]{3}$/, '')
+})
+
+
 Vue.use(VueAxios, axios)
 Vue.use(Region)
 

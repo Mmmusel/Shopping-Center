@@ -1,27 +1,48 @@
 <template>
   <v-expansion-panels focusable>
     <v-expansion-panel
-        v-for="item in items"
-        :key="item.name"
+        v-for="item in business_orders"
+        :key="item.fields.customer_name"
     >
       <v-expansion-panel-header>
         <!--蓝底头像+用户名-->
         <v-col>
+          <!--
           <v-avatar
-            :color="item.color"
+            color="#64B5F6"
             size="56"
             class="white--text"
           >
-            {{ item.name }}
+            {{ item.fields.customer_name }}
           </v-avatar>
+          !-->
+          <img :src="`http://127.0.0.1:8000/media/${userAvatar[item.fields.customer_id]}`" alt=""
+                    height="50px" width="50px">
         </v-col>
         <!--用户名-->
         <v-col>
-          <v-list-item-title>{{ item.name }}</v-list-item-title>
+          <v-list-item-title>{{ item.fields.customer_name }}</v-list-item-title>
+        </v-col>
+        <!--下单时间-->
+        <v-col>
+          <v-list-item-title>{{ item.fields.order_createtime | format  }}</v-list-item-title>
         </v-col>
         <!--地址-->
         <v-col>
-          <v-list-item-title>{{ item.address }}</v-list-item-title>
+          <!--<v-list-item-title>{{ item.address }}</v-list-item-title>-->
+          <region-text
+                  separator="-"
+                  :town="false"
+                  v-model="item.fields.region"
+          />
+        </v-col>
+        <v-col>
+          <v-list-item-title>{{ item.fields.customer_address  }}</v-list-item-title>
+
+        </v-col>
+        <v-col>
+          <v-list-item-title>{{ item.fields.customer_mobile  }}</v-list-item-title>
+
         </v-col>
 
         <!-- 提醒付款：需要消息系统，后续实现-->
@@ -42,7 +63,7 @@
       </v-expansion-panel-header>
 
       <v-expansion-panel-content>
-        <Order_cart></Order_cart>
+        <Order_cart :info="item" :orderProducts="orderProducts" :productDictList="nowProduct" ></Order_cart>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
@@ -50,9 +71,13 @@
 
 <script>
 import Order_cart from "@/components/business/order_cart";
+import {RegionText} from 'v-region'
 export default {
   name: 'order_weifukuan',
-  components: {Order_cart},
+  components: {Order_cart,
+
+    RegionText
+  },
   data: () => ({
     items: [
       {color: '#2196F3', name: 'lzh', address: '北京', dingdan:'111'},
@@ -72,7 +97,57 @@ export default {
     btn_content: '提醒付款',
     loader: null,
     loading: false,
+
+
+    business_orders:[],
+    orderProducts:[],
+    nowProduct:[],
+    userAvatar:[],
+
+
   }),
+  methods:{
+
+    async initBusinessOrders(){
+      await this.axios.get('show_business_orderProduct/',{params:{business_id: this.$store.state.userId}})
+        .then((response) => {
+            console.log(response);
+            this.business_orders = response.data.orders;
+            response.data.nowProduct.forEach(item => {
+                    this.nowProduct[item.pk] = item;
+                });
+
+            response.data.userAvatar.forEach(item => {
+                    this.userAvatar[item.pk] = item.fields.user_avatar;
+                });
+
+            this.business_orders.forEach(item => {
+                    item.fields['region']={
+                      province:item.fields.customer_province,
+                      city:item.fields.customer_city,
+                      area:item.fields.customer_area,
+                      town:''
+                    }
+
+                });
+
+
+
+            this.orderProducts = response.data.orderProducts;
+            //this.nowProduct = response.data.nowProduct;
+            console.log(this.business_orders);
+            //this.business_orders_ids = response.data.list.map(item => item.pk)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    },
+
+  },
+  async created(){
+    await this.initBusinessOrders()
+  },
 
   watch: {
     loader () {

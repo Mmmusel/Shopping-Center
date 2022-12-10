@@ -50,6 +50,7 @@ urlpatterns = [
     path('show_order_products/',OrderView.show_order_products),
     path('show_business_order/',OrderView.show_business_order),
     path('show_customer_order/',OrderView.show_customer_order),
+    path('show_business_orderProduct/',OrderView.show_business_orderProduct),
 
 
     re_path(r'^media/avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'avatar/')}),

@@ -10,38 +10,34 @@
         </div>
         <div class="cart-content">
             <!-- 列表显示购物清单 -->
-            <div class="cart-content-main" v-for="(item, index)  in userCartList" :key="item.index">
+            <div class="cart-content-main" v-for="(item)  in cart_list" :key="item.index">
                 <div class="cart-info">
                     <img :src="`http://127.0.0.1:8000/media/${productDictList[item.fields.product_id].fields.product_image}`" alt=""
                     height="150px" width="150px">
                     <span>{{productDictList[item.fields.product_id].fields.product_name}}</span>
                 </div>
                 <div class="cart-price">
-                    ￥ {{productDictList[item.fields.product_id].fields.product_cost}}
+                    ￥ {{item.fields.order_product_cost}}
                 </div>
                 <div class="cart-count">
-                    <span class="cart-control-minus"
-                          @click="handleCount(index, -1)">-</span>
+
                     {{item.fields.num}}
-                    <span class="cart-control-add"
-                          @click="handleCount(index, 1)">+</span>
+
                 </div>
                 <div class="cart-cost">
-                    ￥ {{productDictList[item.fields.product_id].fields.product_cost * (item.fields.num-0.0)}}
+                    ￥ {{item.fields.order_product_cost * (item.fields.num-0.0)}}
                 </div>
             </div>
-            <div class="cart-empty" v-if="!userCartList.length">无商品</div>
+            <div class="cart-empty" v-if="!cart_list.length">无商品</div>
         </div>
-        <div class="cart-footer" v-show="userCartList.length">
+        <div class="cart-footer" v-show="cart_list.length">
             <div class="cart-footer-desc">
                 共计 <span>{{countAll}}</span>
             </div>
             <div class="cart-footer-desc">
-                应付总额 <span>{{costAll - promotion}}</span>
+                总额 <span>{{costAll}}</span>
                 <br>
-                <template v-if="promotion">
-                    (优惠<span>￥ {{promotion}} </span>)
-                </template>
+
             </div>
         </div>
     </div>
@@ -50,130 +46,51 @@
 <script>
     export default {
         name: "order_cart",
+      props: {
+          info: Object,
+          orderProducts: Object,
+          productDictList: Object,
+        },
         data(){
             return {
-                promotion: 0,
-                promotionCode: '',
+
                 userCartList:[],  //从cart表取到的原数据
                 cartProductList:[],  //cart表里包含的product表的原数据
                 productList: [],
-                productDictList:[]  //product_id -> product
+                //productDictList:[] , //product_id -> product
+
+              cart_list:[],
+
             }
         },
+      created(){
+          this.orderProducts.forEach(item => {
+            if(item.fields.order_id==this.info.pk){
+              this.cart_list.push(item)
+            }
+            });
+      },
         computed: {
             //订单商品总数
             countAll(){
                 let count = 0;
-                this.userCartList.forEach(item => {
+                this.cart_list.forEach(item => {
                     count += item.fields.num;
                 });
                 return count;
             },//订单商品总价
             costAll(){
                 let cost = 0;
-                this.userCartList.forEach(item => {
-                    cost += this.productDictList[item.fields.product_id].fields.product_cost * (item.fields.num-0.0);
-                    console.log(this.productDictList[item.fields.product_id].fields.product_cost * (item.fields.num-0.0));
-                    console.log((item.fields.num-0.0));
-                    console.log(this.productDictList[item.fields.product_id].fields.product_cost);
+                this.cart_list.forEach(item => {
+                    cost += item.fields.order_product_cost * (item.fields.num-0.0);
+
                 });
                 return cost;
             }
 
         },
-        methods: {
-            //通知Vuex,完成下单
-            async handleOrder(){
-
-              console.log("thisthis");
-              await this.axios.get('add_order/',
-                  {params:{user_id: this.$store.state.userId}})
-              .then((response) => {
-                  console.log(response);
-                  //this.list = response.data.list
-
-              })
-              .catch(function (error) {
-                  console.log(error);
-
-              });
-              console.log("this end");
-
-              var i = this.userCartList.length
-              for (; i>0; i--) {
-                await this.handleDelete(0)
-              }
 
 
-
-              window.alert('购买成功');
-
-
-            },
-
-            async handleCount(index,count) {
-              await this.axios.get('edit_num_in_cart/',
-                  {
-                    params: {
-                      user_id: this.$store.state.userId,
-                      product_id: this.userCartList[index].fields.product_id,
-                      num: count
-                    }
-                  })
-                  .then((response) => {
-                    console.log("!!!!!!!!!!!!!!!!!----------");
-                    console.log(response);
-                    //this.list = response.data.list
-                    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
-              await this.cartList(this.$store.state.userId)
-            },
-
-            //订单数据
-            async cartList(x1){
-              await this.axios.get('show_cart/',{params:{user_id: x1}})
-              .then((response) => {
-                  console.log(response);
-                  this.userCartList = response.data.list
-              })
-              .catch(function (error) {
-                  console.log(error);
-              });
-
-              await this.cartProductsList(this.$store.state.userId)
-
-              this.productDictList = {};
-              await this.cartProductList.forEach(item => {
-                    this.productDictList[item.pk] = item;
-                });
-            },
-          async cartProductsList(x1){
-              await this.axios.get('cartProductsList/',{params:{user_id: x1}})
-              .then((response) => {
-                  console.log(response);
-                  this.cartProductList = response.data.list
-              })
-              .catch(function (error) {
-                  console.log(error);
-              });
-
-            }
-        },
-
-        async created(){
-          console.log("cart-create");
-          console.log(this.$store.state.userId)
-          await this.cartList(this.$store.state.userId)
-          console.log("cart-create-success");
-          await this.cartProductsList(this.$store.state.userId)
-          console.log(this.productDictList);
-          console.log(this.productDictList[2].fields.product_cost);
-
-
-        }
     }
 </script>
 

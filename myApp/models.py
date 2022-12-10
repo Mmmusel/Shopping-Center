@@ -29,9 +29,17 @@ class OrderInfo(models.Model):
     customer_name = models.CharField(max_length=64)
     customer_address = models.CharField(max_length=64)
     customer_mobile = models.CharField(max_length=64)
+    customer_province = models.CharField(max_length=16, null=True)
+    customer_city = models.CharField(max_length=16, null=True)
+    customer_area = models.CharField(max_length=16, null=True)
+
+
     business_name = models.CharField(max_length=64)
     business_address = models.CharField(max_length=64)
     business_mobile = models.CharField(max_length=64)
+    business_province = models.CharField(max_length=16, null=True)
+    business_city = models.CharField(max_length=16, null=True)
+    business_area = models.CharField(max_length=16, null=True)
 
 class OrderProducts(models.Model):
     order_id = models.ForeignKey("OrderInfo", on_delete=models.CASCADE)
