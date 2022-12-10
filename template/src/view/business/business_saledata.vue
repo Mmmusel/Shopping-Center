@@ -33,6 +33,7 @@
           <v-btn
               class="ma-2"
               color="blue"
+              @click="leftPage"
           >
             <v-icon color="white">mdi-arrow-left</v-icon>
           </v-btn>
@@ -40,12 +41,13 @@
           <v-btn
               class="ma-2"
               color="blue"
+              @click="rightPage"
           >
             <v-icon color="white">mdi-arrow-right</v-icon>
           </v-btn>
         </v-row>
         <v-row class="ml-3">
-          7天业务量
+          周业务量
         </v-row>
         <line-chart
             width="98%"
@@ -101,6 +103,33 @@ const DEFAULT_PANELS = [
     text: "-368.20（元）",
   },
 ];
+
+var now = new Date(); //当前日期
+var nowDayOfWeek = now.getDay(); //今天本周的第几天
+var nowDay = now.getDate(); //当前日
+var nowMonth = now.getMonth(); //当前月
+var nowYear = now.getFullYear(); //当前年
+
+//获得本周的开端日期
+function getWeekStartDate(offset,weekday) {
+let weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek +weekday+ 7*offset);
+return weekStartDate;
+}
+
+
+function formatDate(date) {
+let myyear = date.getFullYear();
+let mymonth = date.getMonth() + 1;
+let myweekday = date.getDate();
+if (mymonth < 10) {
+mymonth = "0" + mymonth;
+}
+if (myweekday < 10) {
+myweekday = "0" + myweekday;
+}
+return (myyear + "" + mymonth + "" + myweekday);
+}
+
 export default {
   name: "business_saledata",
   components: {
@@ -110,11 +139,57 @@ export default {
     business_name :"商家lll",
     lineChartData,
     indicators: DEFAULT_PANELS,
+    offset:0,
     lineChartIndicators: ["采购额", "销售额", "支出", "利润"],
-    dimension: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+    dimension: ["周一\n"+formatDate(getWeekStartDate(0,1)),
+      "周二\n"+formatDate(getWeekStartDate(0,2)),
+      "周三\n"+formatDate(getWeekStartDate(0,3)),
+      "周四\n"+formatDate(getWeekStartDate(0,4)),
+      "周五\n"+formatDate(getWeekStartDate(0,5)),
+      "周六\n"+formatDate(getWeekStartDate(0,6)),
+      "周日\n"+formatDate(getWeekStartDate(0,7)),],
     chartLoaded: false,
+
+
+
+
+
   }),
+ computed: {
+
+
+
+      },
+   methods:{
+    leftPage(){
+      this.offset-=1
+      this.newDimension()
+
+
+    },
+     rightPage(){
+      this.offset+=1
+       this.newDimension()
+    },
+     newDimension(){
+      this.dimension= ["周一\n"+formatDate(getWeekStartDate(this.offset,1)),
+      "周二\n"+formatDate(getWeekStartDate(this.offset,2)),
+      "周三\n"+formatDate(getWeekStartDate(this.offset,3)),
+      "周四\n"+formatDate(getWeekStartDate(this.offset,4)),
+      "周五\n"+formatDate(getWeekStartDate(this.offset,5)),
+      "周六\n"+formatDate(getWeekStartDate(this.offset,6)),
+      "周日\n"+formatDate(getWeekStartDate(this.offset,7)),]
+       console.log(this.dimension)
+     }
+   },
+  created() {
+
+  },
+
+
   mounted() {
+
+
     getHomePanels()
         .then((homePanels) => {
           this.indicators = homePanels;

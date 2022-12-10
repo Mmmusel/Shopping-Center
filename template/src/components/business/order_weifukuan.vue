@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels focusable>
+  <v-expansion-panels focusable multiple popout>
     <v-expansion-panel
         v-for="item in business_orders"
         :key="item.fields.customer_name"

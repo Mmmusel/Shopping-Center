@@ -22,6 +22,8 @@ Vue.filter('format', function(date) {
 })
 
 
+
+
 Vue.use(VueAxios, axios)
 Vue.use(Region)
 
