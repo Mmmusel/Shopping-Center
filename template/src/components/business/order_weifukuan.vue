@@ -48,16 +48,10 @@
         <!-- 提醒付款：需要消息系统，后续实现-->
         <v-col>
           <v-btn
-            class="ma-2"
-            :loading="loading"
-            :disabled="loading"
             color="success"
-            @click="loader = 'loading'"
+            @click="changeStatus(item.fields.pk)"
           >
             {{btn_content}}
-            <template v-slot:loader>
-              <span>Loading...</span>
-            </template>
           </v-btn>
         </v-col>
       </v-expansion-panel-header>
@@ -95,8 +89,6 @@ export default {
      */
 
     btn_content: '提醒付款',
-    loader: null,
-    loading: false,
 
 
     business_orders:[],
@@ -144,20 +136,12 @@ export default {
 
     },
 
+    changeStatus(order_id) {
+      console.log(order_id)
+    },
   },
   async created(){
     await this.initBusinessOrders()
-  },
-
-  watch: {
-    loader () {
-      const l = this.loader
-      this[l] = !this[l]
-
-      setTimeout(() => (this[l] = false), 500)
-
-      this.loader = null
-    },
   },
 }
 </script>
