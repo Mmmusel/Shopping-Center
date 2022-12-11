@@ -27,15 +27,11 @@
             <v-col
                 v-for="item in props.items"
                 :key="item.fields.product_name"
-                cols="12"
-                sm="6"
-                md="4"
-                lg="3"
             >
 
               <business_Product  :info="item" :key="item.fields.id"></business_Product>
 
-              </v-col>
+            </v-col>
           </v-row>
         </template>
 
