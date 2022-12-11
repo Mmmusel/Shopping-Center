@@ -36,10 +36,14 @@ urlpatterns = [
     path('fetch_userInfo/',BookView.fetch_userInfo),
     path('edit_userInfo/',BookView.edit_userInfo),
     path('userId2userName/',BookView.userId2userName),
-    #path('upload_action/',BookView.upload_action),
+
     path('add_product/', BookView.add_product),
     path('show_products/',BookView.show_products),
     path('fetch_product/',BookView.fetch_product),
+    path('add_product_stock/',BookView.add_product_stock),
+    path('fetch_stock/',BookView.fetch_stock),
+
+
     path('show_cart/',CartView.show_cart),
     path('add_to_cart/',CartView.add_to_cart),
     path('delete_item_in_cart/',CartView.delete_item_in_cart),

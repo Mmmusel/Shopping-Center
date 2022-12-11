@@ -33,7 +33,7 @@
                 lg="3"
             >
 
-              <Customer_Product  :info="item" :key="item.fields.id"></Customer_Product>
+              <business_Product  :info="item" :key="item.fields.id"></business_Product>
 
               </v-col>
           </v-row>
@@ -139,13 +139,13 @@
 </template>
 
 <script>
-import Customer_Product from "@/components/customer/customer_product";
+import business_Product from "@/components/business/business_product";
 
 export default {
   name: "business_commodity",
   components:{
 
-    Customer_Product
+    business_Product
   },
   data () {
     return {

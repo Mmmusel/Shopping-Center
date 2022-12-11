@@ -92,6 +92,13 @@ export default new Router({
                     component: () => import('@/view/business/business_add_commodity'),
                 },
                 {
+            path: 'commodity/edit_commodity_stock/:id',
+            meta: {
+                title: '增加库存'
+            },
+            component: (resolve) => require(['../components/business/edit_commodity_stock.vue'], resolve)
+        },
+                {
                     path : 'saledata',
                     component: () => import('@/view/business/business_saledata')
                 },

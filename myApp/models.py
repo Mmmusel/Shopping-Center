@@ -21,6 +21,19 @@ class UserInfo(models.Model):
     user_area = models.CharField(max_length=16, null=True)
 
 
+class StockInfo(models.Model):
+    business_id = models.ForeignKey("UserInfo",  on_delete=models.CASCADE)
+    product_id = models.ForeignKey("Product", on_delete=models.CASCADE)
+    stock_num = models.IntegerField()
+    stock_cost = models.DecimalField(max_digits=9, decimal_places=2)
+    stock_createtime = models.DateTimeField(auto_now_add=True)
+
+    business_province = models.CharField(max_length=16, null=True)
+    business_city = models.CharField(max_length=16, null=True)
+    business_area = models.CharField(max_length=16, null=True)
+
+
+
 class OrderInfo(models.Model):
     customer_id = models.ForeignKey("UserInfo", related_name='customer',on_delete=models.CASCADE)
     business_id = models.ForeignKey("UserInfo", related_name='business',on_delete=models.CASCADE)

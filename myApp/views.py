@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 
 
-from myApp.models import Book, UserInfo,Product,CartItems
+from myApp.models import Book, UserInfo,Product,CartItems,StockInfo
 import json
 
 
@@ -101,6 +101,64 @@ def fetch_product(request):
         response['error_num'] = 1
     return JsonResponse(response)
 
+def add_product_stock(request):
+    response = {}
+    try:
+        product = Product.objects.get(id=request.GET.get('product_id'))
+
+
+        stock=int(request.GET.get('stock'))
+
+
+        product.product_stock+=stock
+        product.save()
+
+        cost = 0.0
+
+        if request.GET.get('cost').find('.'):
+            cost = float(request.GET.get('cost'))
+        else:
+            cost = 1.0 * int(request.GET.get('cost'))
+
+
+        stockInfo = StockInfo(
+                              business_id=product.product_business,
+                            product_id=product,
+        stock_num = stock,
+        stock_cost = cost,
+                              business_province=product.product_business.user_province,
+                              business_city=product.product_business.user_city,
+                              business_area=product.product_business.user_area
+                              )
+        stockInfo.save()
+
+
+
+
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
+
+def fetch_stock(request):
+    response = {}
+    try:
+        # 所有订单
+        o1 = UserInfo.objects.get(id=request.GET.get('business_id'))
+        orderIds = StockInfo.objects.filter(business_id=o1).order_by('stock_createtime')
+
+
+        response['stock_orders'] = json.loads(serializers.serialize("json", orderIds))
+
+
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
 
 
 
