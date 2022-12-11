@@ -166,7 +166,8 @@ def add_userInfo(request):
     response = {}
     try:
         userInfo = UserInfo(user_name=request.GET.get('user_name'),
-                            user_password=request.GET.get('user_password'))
+                            user_password=request.GET.get('user_password'),
+                            user_type=request.GET.get('user_type'))
         userInfo.save()
         response['msg'] = 'success'
         response['userId'] = userInfo.id
@@ -182,6 +183,21 @@ def search_userInfo(request):
         userInfo = UserInfo.objects.get(user_name=request.GET.get('user_name'),
                                         user_password=request.GET.get('user_password'))
         response['userId'] = userInfo.id
+        response['user_type'] = userInfo.user_type
+        response['msg'] = 'succes111s'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+
+    return JsonResponse(response)
+
+def search_usertype(request):
+    response = {}
+    try:
+        userInfo = UserInfo.objects.get(id=request.GET.get('user_id'))
+
+        response['user_type'] = userInfo.user_type
         response['msg'] = 'succes111s'
         response['error_num'] = 0
     except Exception as e:

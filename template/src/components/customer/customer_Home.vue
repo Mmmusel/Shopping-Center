@@ -8,6 +8,7 @@
         <div class="header-menu">
           {{user}}
         </div>
+        <!--
         {% csrf_token %}
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="商品图片">
@@ -18,6 +19,7 @@
             <el-button type="primary" @click="onSubmit">确认添加</el-button>
           </el-form-item>
         </el-form>
+        -->
         <div class="header-menu">
           <router-link to="/cart"
                        class="header-menu-cart">

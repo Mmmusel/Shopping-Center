@@ -7,7 +7,16 @@ export default new Router({
     routes: [
         {
             path: '/',
-            component: () => import('@/view/login'),
+            component: () => import('@/components/customer/login.vue'),
+            children:[
+                {
+            path: '/login/:loginStatus',
+            meta: {
+                title: '登录注册'
+            },
+            component: (resolve) => require(['../components/customer/login.vue'], resolve)
+        }
+            ]
         },
         {
             path: '/customer',

@@ -38,6 +38,7 @@ class OrderInfo(models.Model):
     customer_id = models.ForeignKey("UserInfo", related_name='customer',on_delete=models.CASCADE)
     business_id = models.ForeignKey("UserInfo", related_name='business',on_delete=models.CASCADE)
     order_createtime = models.DateTimeField(auto_now_add=True)
+    order_status = models.CharField(max_length=10,null=True)
 
     customer_name = models.CharField(max_length=64)
     customer_address = models.CharField(max_length=64)

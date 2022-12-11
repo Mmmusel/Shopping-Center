@@ -83,6 +83,22 @@ def show_business_orderProduct(request):
         response['error_num'] = 1
     return JsonResponse(response)
 
+def alterOrderStatus(request):
+    response = {}
+    try:
+        order = OrderInfo.objects.get(id=request.GET.get('order_id'))
+        order.order_status=request.GET.get('status')
+        order.save()
+
+
+        response['msg'] = 'succes111s'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+
+    return JsonResponse(response)
+
 
 def add_order(request):
     response = {}
@@ -107,6 +123,7 @@ def add_order(request):
             orderInfo = OrderInfo(customer_id=o1,
                                   business_id=o2,
                                   # order_createtime = ,
+                                  order_status='买家未付款',
 
                                   customer_name=o1.user_name,
                                   customer_address=o1.user_address,
