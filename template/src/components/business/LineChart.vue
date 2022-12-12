@@ -52,6 +52,7 @@
           this.setOptions(val);
         },
       },
+
     },
     mounted() {
       this.$nextTick(() => {

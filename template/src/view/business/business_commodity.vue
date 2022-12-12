@@ -27,6 +27,20 @@
             <v-col
                 v-for="item in props.items"
                 :key="item.fields.product_name"
+            >
+
+              <business_Product  :info="item" :key="item.fields.id"></business_Product>
+
+            </v-col>
+          </v-row>
+        </template>
+
+<!--
+        <template v-slot:default="props">
+          <v-row>
+            <v-col
+                v-for="item in props.items"
+                :key="item.fields.product_name"
                 cols="12"
                 sm="6"
                 md="4"
@@ -50,6 +64,7 @@
             </v-col>
           </v-row>
         </template>
+        -->
 
         <template v-slot:footer>
           <v-row class="mt-2" align="center" justify="center">
@@ -109,12 +124,25 @@
         </template>
       </v-data-iterator>
     </v-container>
+    <v-btn
+      class="ma-2"
+      color="success"
+      @click="addCommodity"
+    >
+      添加商品
+    </v-btn>
   </div>
 </template>
 
 <script>
+import business_Product from "@/components/business/business_product";
+
 export default {
   name: "business_commodity",
+  components:{
+
+    business_Product
+  },
   data () {
     return {
       itemsPerPageArray: [4, 8, 12],
@@ -207,6 +235,10 @@ export default {
             console.log(error);
         });
     },
+
+    addCommodity() {
+      this.$router.push({path: '/business/commodity/add_commodity'})
+    }
   },
   async created(){
 
@@ -218,3 +250,4 @@ export default {
   }
 }
 </script>
+

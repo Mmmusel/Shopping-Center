@@ -7,7 +7,16 @@ export default new Router({
     routes: [
         {
             path: '/',
-            component: () => import('@/view/login'),
+            component: () => import('@/components/customer/login.vue'),
+            children:[
+                {
+            path: '/login/:loginStatus',
+            meta: {
+                title: '登录注册'
+            },
+            component: (resolve) => require(['../components/customer/login.vue'], resolve)
+        }
+            ]
         },
         {
             path: '/customer',
@@ -76,8 +85,8 @@ export default new Router({
             component: () => import('@/view/business/business'),
             children: [
                 {
-                    path : 'home',
-                    component: () => import('@/view/business/business_home')
+                    path : '',
+                    component: () => import('@/view/business/business_order')
                 },
                 {
                     path : 'order',
@@ -85,11 +94,22 @@ export default new Router({
                 },
                 {
                     path : 'commodity',
-                    component: () => import('@/view/business/business_commodity')
+                    component: () => import('@/view/business/business_commodity'),
                 },
                 {
+                    path : 'commodity/add_commodity',
+                    component: () => import('@/view/business/business_add_commodity'),
+                },
+                {
+            path: 'commodity/edit_commodity_stock/:id',
+            meta: {
+                title: '增加库存'
+            },
+            component: (resolve) => require(['../components/business/edit_commodity_stock.vue'], resolve)
+        },
+                {
                     path : 'saledata',
-                    component: () => import('@/view/business/business_home')
+                    component: () => import('@/view/business/business_saledata')
                 },
                 {
                     path : 'information',

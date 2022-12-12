@@ -48,11 +48,14 @@
         </v-list-item>
       </v-list>
 
+
       <template v-slot:append>
         <div class="pa-2">
+          <router-link to="/login/logout">
           <v-btn block>
             退出登录
           </v-btn>
+            </router-link>
         </div>
       </template>
     </v-navigation-drawer>
@@ -73,8 +76,7 @@ export default {
 
   data: () => ({
     drawer: null,
-    links:[{ text: '主页', icon: 'mdi-inbox-arrow-down',route:"/business/home"},
-      { text: '订单信息', icon: 'mdi-inbox-arrow-down',route:"/business/order"},
+    links:[{ text: '订单信息', icon: 'mdi-inbox-arrow-down',route:"/business/order"},
       { text: '上架商品', icon: 'mdi-send',route:"/business/commodity"},
       { text: '销售数据', icon: 'mdi-delete',route:"/business/saledata"},
       { text: '店铺信息', icon: 'mdi-alert-octagon',route:"/business/information"},],

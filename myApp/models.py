@@ -11,22 +11,49 @@ class UserInfo(models.Model):
 
     user_type = models.CharField(max_length=10,null=True)
 
-    user_address = models.CharField(max_length=64,unique=True,null=True)
-    user_mobile = models.CharField(max_length=64, unique=True,null=True)
+    user_address = models.CharField(max_length=64,null=True)
+    user_mobile = models.CharField(max_length=64, null=True)
     user_avatar = models.ImageField(upload_to="user_avatar/",null=True)
     user_createtime = models.DateField(auto_now_add=True,null=True)
+
+    user_province = models.CharField(max_length=16,null=True)
+    user_city = models.CharField(max_length=16, null=True)
+    user_area = models.CharField(max_length=16, null=True)
+
+
+class StockInfo(models.Model):
+    business_id = models.ForeignKey("UserInfo",  on_delete=models.CASCADE)
+    product_id = models.ForeignKey("Product", on_delete=models.CASCADE)
+    stock_num = models.IntegerField()
+    stock_cost = models.DecimalField(max_digits=9, decimal_places=2)
+    stock_createtime = models.DateTimeField(auto_now_add=True)
+
+    business_province = models.CharField(max_length=16, null=True)
+    business_city = models.CharField(max_length=16, null=True)
+    business_area = models.CharField(max_length=16, null=True)
+
+
 
 class OrderInfo(models.Model):
     customer_id = models.ForeignKey("UserInfo", related_name='customer',on_delete=models.CASCADE)
     business_id = models.ForeignKey("UserInfo", related_name='business',on_delete=models.CASCADE)
     order_createtime = models.DateTimeField(auto_now_add=True)
+    order_status = models.CharField(max_length=10,null=True)
 
     customer_name = models.CharField(max_length=64)
     customer_address = models.CharField(max_length=64)
     customer_mobile = models.CharField(max_length=64)
+    customer_province = models.CharField(max_length=16, null=True)
+    customer_city = models.CharField(max_length=16, null=True)
+    customer_area = models.CharField(max_length=16, null=True)
+
+
     business_name = models.CharField(max_length=64)
     business_address = models.CharField(max_length=64)
     business_mobile = models.CharField(max_length=64)
+    business_province = models.CharField(max_length=16, null=True)
+    business_city = models.CharField(max_length=16, null=True)
+    business_area = models.CharField(max_length=16, null=True)
 
 class OrderProducts(models.Model):
     order_id = models.ForeignKey("OrderInfo", on_delete=models.CASCADE)

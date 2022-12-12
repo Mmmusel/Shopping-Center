@@ -4,14 +4,28 @@ import vuetify from './plugins/vuetify'
 import router from './router/index'
 //import router from './router/index' //导入刚刚在route文件下定义的router
 import store from './components/customer/store'
+import Region from 'v-region'
 import ElementUI from "element-ui";
 import 'element-ui/lib/theme-chalk/index.css'
+import '@mdi/font/css/materialdesignicons.css'
 
+import { RegionSelects } from 'v-region'
+
+Vue.component('v-region-selects', RegionSelects)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-Vue.use(VueAxios, axios)
+Vue.filter('format', function(date) {
+    //var json_date = new Date(date).toJSON();
+    //return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    return date.replace(/T/g, ' ').replace(/\.[\d]{3}$/, '')
+})
 
+
+
+
+Vue.use(VueAxios, axios)
+Vue.use(Region)
 
 new Vue({
   vuetify,

@@ -36,10 +36,15 @@ urlpatterns = [
     path('fetch_userInfo/',BookView.fetch_userInfo),
     path('edit_userInfo/',BookView.edit_userInfo),
     path('userId2userName/',BookView.userId2userName),
-    #path('upload_action/',BookView.upload_action),
+    path('search_usertype/',BookView.search_usertype),
+
     path('add_product/', BookView.add_product),
     path('show_products/',BookView.show_products),
     path('fetch_product/',BookView.fetch_product),
+    path('add_product_stock/',BookView.add_product_stock),
+    path('fetch_stock/',BookView.fetch_stock),
+
+
     path('show_cart/',CartView.show_cart),
     path('add_to_cart/',CartView.add_to_cart),
     path('delete_item_in_cart/',CartView.delete_item_in_cart),
@@ -50,6 +55,8 @@ urlpatterns = [
     path('show_order_products/',OrderView.show_order_products),
     path('show_business_order/',OrderView.show_business_order),
     path('show_customer_order/',OrderView.show_customer_order),
+    path('show_business_orderProduct/',OrderView.show_business_orderProduct),
+    path('alterOrderStatus/',OrderView.alterOrderStatus),
 
 
     re_path(r'^media/avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'avatar/')}),
