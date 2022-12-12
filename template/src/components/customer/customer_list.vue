@@ -1,14 +1,6 @@
 <template>
   <div v-show="list.length">
-    <!--搜索框-->
-    <div class="container" id="div1">
-      <div class="search bar1">
-        <form>
-          <input type="text" v-model="inputText" placeholder="请输入您要搜索的内容...">
-          <button type="submit" @click="Click()"> <img src="../../assets/search.png" width="20px" height="20px"> </button>
-        </form>
-      </div>
-    </div>
+
     <div class="list-control">
       <div class="list-control-filter">
         <span>品牌:</span>

@@ -62,14 +62,14 @@ export default new Router({
             meta: {
                 title: '个人中心'
             },
-            component: (resolve) => require(['../components/customer/customer_personal'], resolve)
+            component: (resolve) => require(['../view/business/business_information'], resolve)
         },
         {
             path: '/customerOrder2',
             meta: {
                 title: '我的订单2'
             },
-            component: (resolve) => require(['../components/customer/orderTry'], resolve)
+            component: (resolve) => require(['../components/customer/order/customer_order'], resolve)
         },
         {
             path: '*',

@@ -83,6 +83,75 @@ def show_business_orderProduct(request):
         response['error_num'] = 1
     return JsonResponse(response)
 
+def show_business_orderProduct_status(request):
+    response = {}
+    try:
+        #所有订单
+        o1 = UserInfo.objects.get(id=request.GET.get('business_id'))
+        orderIds = OrderInfo.objects.filter(business_id=o1).filter(order_status=request.GET.get('status')).order_by('order_createtime')
+
+        #商家的所有订单 涉及到的用户头像
+        userAvatar=[]
+        for i in orderIds:
+            userAvatar.append(i.customer_id)
+
+        #所有订单涉及到的商品
+        orderProduct = []
+        nowProduct = []
+        for i in orderIds:
+            t=OrderProducts.objects.filter(order_id=i)
+            orderProduct.extend(t)
+            for j in t:
+                nowProduct.append(j.product_id)
+
+        #去重
+        nowProduct = list(set(nowProduct))
+
+        response['orders'] = json.loads(serializers.serialize("json", orderIds))
+        response['orderProducts'] = json.loads(serializers.serialize("json", orderProduct))
+        response['nowProduct'] = json.loads(serializers.serialize("json", nowProduct))
+        response['userAvatar'] = json.loads(serializers.serialize("json", userAvatar))
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
+
+def show_customer_orderProduct_status(request):
+    response = {}
+    try:
+        #所有订单
+        o1 = UserInfo.objects.get(id=request.GET.get('business_id'))
+        orderIds = OrderInfo.objects.filter(customer_id=o1).filter(order_status=request.GET.get('status')).order_by('order_createtime')
+
+        #商家的所有订单 涉及到的用户头像
+        userAvatar=[]
+        for i in orderIds:
+            userAvatar.append(i.customer_id)
+
+        #所有订单涉及到的商品
+        orderProduct = []
+        nowProduct = []
+        for i in orderIds:
+            t=OrderProducts.objects.filter(order_id=i)
+            orderProduct.extend(t)
+            for j in t:
+                nowProduct.append(j.product_id)
+
+        #去重
+        nowProduct = list(set(nowProduct))
+
+        response['orders'] = json.loads(serializers.serialize("json", orderIds))
+        response['orderProducts'] = json.loads(serializers.serialize("json", orderProduct))
+        response['nowProduct'] = json.loads(serializers.serialize("json", nowProduct))
+        response['userAvatar'] = json.loads(serializers.serialize("json", userAvatar))
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
 def alterOrderStatus(request):
     response = {}
     try:

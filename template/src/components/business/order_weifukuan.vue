@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels focusable multiple popout>
+  <v-expansion-panels focusable popout>
     <v-expansion-panel
         v-for="item in business_orders"
         :key="item.fields.customer_name"
@@ -45,19 +45,20 @@
 
         </v-col>
 
-        <!-- 提醒付款：需要消息系统，后续实现-->
-        <v-col>
-          <v-btn
-            color="success"
-            @click="changeStatus(item.fields.pk)"
-          >
-            {{btn_content}}
-          </v-btn>
-        </v-col>
+
       </v-expansion-panel-header>
 
       <v-expansion-panel-content>
         <Order_cart :info="item" :orderProducts="orderProducts" :productDictList="nowProduct" ></Order_cart>
+        <!-- 提醒付款：需要消息系统，后续实现-->
+        <v-col>
+          <v-btn
+            color="success"
+            @click="changeStatus(item.pk)"
+          >
+            {{btn_content}}
+          </v-btn>
+        </v-col>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
@@ -88,7 +89,7 @@ export default {
      * 从每个订单类中查找用户名、商品名和对应的商品数量
      */
 
-    btn_content: '提醒付款',
+    btn_content: '催付款',
 
 
     business_orders:[],
@@ -98,10 +99,19 @@ export default {
 
 
   }),
+  props:{
+    tabkey:Object
+  },
+    watch: {
+  tabkey: function () {
+    this.initBusinessOrders()
+  }
+},
   methods:{
 
     async initBusinessOrders(){
-      await this.axios.get('show_business_orderProduct/',{params:{business_id: this.$store.state.userId}})
+      await this.axios.get('show_business_orderProduct_status/',
+          {params:{business_id: this.$store.state.userId,status:'买家未付款'}})
         .then((response) => {
             console.log(response);
             this.business_orders = response.data.orders;
@@ -122,9 +132,6 @@ export default {
                     }
 
                 });
-
-
-
             this.orderProducts = response.data.orderProducts;
             //this.nowProduct = response.data.nowProduct;
             console.log(this.business_orders);
@@ -136,8 +143,9 @@ export default {
 
     },
 
-    changeStatus(order_id) {
-      console.log(order_id)
+    async changeStatus(click_order_id) {
+      window.alert('提醒成功')
+      console.log(click_order_id)
     },
   },
   async created(){

@@ -50,9 +50,11 @@
 
         <template v-slot:append>
           <div class="pa-2">
-            <v-btn block>
-              退出登录
-            </v-btn>
+            <router-link to="/login/logout">
+          <v-btn block>
+            退出登录
+          </v-btn>
+            </router-link>
           </div>
         </template>
       </v-navigation-drawer>

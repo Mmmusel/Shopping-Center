@@ -28,12 +28,23 @@
           </router-link>
         </div>
 
+        <!--搜索框-->
+    <div class="container" id="div1">
+      <div class="search bar1">
+        <form>
+          <input type="text" v-model="inputText" placeholder="请输入您要搜索的内容...">
+          <button type="submit" @click="Click()"> <img src="../../assets/search.png" width="20px" height="20px"> </button>
+        </form>
+      </div>
+    </div>
+        <!--
         <div class="header-menu">
           <router-link to="/login/logout"
                        class="header-menu-cart">
             退出登录
           </router-link>
         </div>
+        -->
         <customerList></customerList>
       </div>
       <router-view></router-view>
@@ -52,20 +63,23 @@ export default {
   data(){
     return {
       user: '',
+      inputText:'',
       image:'http://127.0.0.1:8000/media/'+'avatar/airPods.jpg',
-      //image:'',
         form: {
-
           goods_image: '',
-
         }
     }
   },
   methods: {
-     getImageFile:function(e) {
-       this.form.goods_image = e.target.files[0];
-    },
-    async onSubmit(){
+
+    Click(){
+      if(this.inputText===''){
+        window.alert('请输入搜索内容')
+        return
+      }
+
+    }
+    /*async onSubmit(){
       console.log("good");
       let formData = new FormData();
       formData.append('goods_image', this.form.goods_image);
@@ -79,7 +93,7 @@ export default {
           console.log(response)
         }
       })
-    }
+    }*/
   },
   computed: {
     cartList(){
