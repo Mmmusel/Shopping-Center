@@ -45,6 +45,18 @@ def show_products(request):
         response['error_num'] = 1
     return JsonResponse(response)
 
+def show_searched_products(request):
+    response = {}
+    try:
+
+        products = Product.objects.filter(product_name__contains=request.GET.get('search_text'))
+        response['list'] = json.loads(serializers.serialize("json", products))
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
 
 
 def add_product(request):

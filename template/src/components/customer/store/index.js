@@ -23,6 +23,7 @@ const store = new Vuex.Store({
         userId: parseInt(window.localStorage.getItem('userId')),
         //登录状态
         loginStatus: !!window.localStorage.getItem('loginStatus'),
+        searchText:''
     },
     getters: {
         //品牌、颜色筛选

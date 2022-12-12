@@ -29,13 +29,18 @@
         </div>
 
         <!--搜索框-->
-    <div class="container" id="div1">
+    <div class="container" id="div1" align="center">
+      <v-row align="center">
       <div class="search bar1">
         <form>
           <input type="text" v-model="inputText" placeholder="请输入您要搜索的内容...">
-          <button type="submit" @click="Click()"> <img src="../../assets/search.png" width="20px" height="20px"> </button>
+
         </form>
-      </div>
+        </div>
+        <div class="search bar1">
+      <button @click="Click"> <img src="../../assets/search.png" width="20px" height="20px"> </button>
+        </div>
+    </v-row>
     </div>
         <!--
         <div class="header-menu">
@@ -64,19 +69,34 @@ export default {
     return {
       user: '',
       inputText:'',
+      statuss:0,
       image:'http://127.0.0.1:8000/media/'+'avatar/airPods.jpg',
         form: {
           goods_image: '',
         }
     }
   },
+  watch:{
+    statuss:function() {
+      if(this.statuss>0){
+        //window.location.href = '/#/business/searchOut';
+        console.log(this.$store.state.searchText)
+      }
+    }
+  },
   methods: {
 
-    Click(){
+    async Click(){
       if(this.inputText===''){
         window.alert('请输入搜索内容')
         return
       }
+      this.$store.state.searchText=this.inputText
+      //window.location.href = '/#/business/searchOut';
+      //window.event.returnValue=false
+      this.$router.push({path: '/searchOut'})
+      //this.statuss+=1;
+
 
     }
     /*async onSubmit(){
@@ -129,5 +149,24 @@ export default {
 }
 body{
   margin:0;
+}
+
+.bar1 {background: #A3D0C3; }
+.bar1 input {
+  border: 2px solid #7BA7AB;
+  border-radius: 5px;
+  background: #F9F0DA;
+  color: #9E9C9C;
+}
+.bar1 button {
+  top: 0;
+  right: 0;
+  background: #7BA7AB;
+  border-radius: 0 5px 5px 0;
+}
+.bar1 button:before {
+  font-family: FontAwesome,serif;
+  font-size: 16px;
+  color: #F9F0DA;
 }
 </style>

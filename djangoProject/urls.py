@@ -43,6 +43,7 @@ urlpatterns = [
     path('fetch_product/',BookView.fetch_product),
     path('add_product_stock/',BookView.add_product_stock),
     path('fetch_stock/',BookView.fetch_stock),
+    path('show_searched_products/',BookView.show_searched_products),
 
 
     path('show_cart/',CartView.show_cart),

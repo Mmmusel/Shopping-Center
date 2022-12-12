@@ -43,6 +43,13 @@ export default new Router({
             },
             component: (resolve) => require(['../components/customer/customer_product_view.vue'], resolve)
         },
+                {
+            path: '/searchOut',
+            meta: {
+                title: '搜索结果'
+            },
+            component: (resolve) => require(['../components/customer/customer_searchout.vue'], resolve)
+        },
         {
             path: '/cart',
             meta: {
