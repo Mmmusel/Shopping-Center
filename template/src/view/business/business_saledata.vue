@@ -27,6 +27,19 @@
       </template>
     </v-row>
 
+    <div>
+      <region-selects
+
+
+                                v-model="chooseRegion"
+                                :town="false"
+
+
+                                @change="selectLogs"
+                                clearable
+                              />
+    </div>
+
    <div>
       <v-card class="mt-9" v-if="chartLoaded">
         <v-row>
@@ -57,6 +70,77 @@
         ></line-chart>
       </v-card>
     </div>
+
+
+    <div v-show="list.length">
+
+    <div class="list-control">
+      <div class="list-control-filter">
+        <span>品牌:</span>
+        <span class="list-control-filter-item"
+              :class="{on: item === filterBrand}"
+              v-for="item in brands" :key="item.index"
+              @click="handleFilterBrand(item)" >{{item}}</span>
+      </div>
+      <div class="list-control-filter">
+        <span>颜色:</span>
+        <span class="list-control-filter-item"
+              :class="{on: item === filterColor}"
+              v-for="item in colors" :key="item.index"
+              @click="handleFilterColor(item)">{{item}}</span>
+      </div>
+
+      <div class="list-control-order">
+        <span>排序:</span>
+        <span class="list-control-order-item"
+              :class="{on: order === ''}"
+              @click="handleOrderDefault">默认</span>
+        <span class="list-control-order-item"
+              :class="{on: order === 'sales'}"
+              @click="handleOrderSales">
+                    销量
+                    <template v-if="order === 'sales'">↓</template>
+                </span>
+        <span class="list-control-order-item"
+              :class="{on: order.indexOf('cost') > -1}"
+              @click="handleOrderCost">
+                    价格
+                    <template v-if="order === 'cost-desc'">↓</template>
+                    <template v-if="order === 'cost-asc'">↑</template>
+                </span>
+      </div>
+    </div>
+    <div class="productsList">
+      <!--<business_Product v-for="item in filteredAndOrderedList" :info="item" :key="item.fields.id"></business_Product>
+-->
+      <div class="product" v-for="item in filteredAndOrderedList" :key="item.fields.id">
+      <img :src="`http://127.0.0.1:8000/media/${item.fields.product_image}`" alt="" height="200px">
+      <h4>{{item.fields.product_name}}</h4>
+        <v-btn
+
+            @click="ttt(item.pk)"
+          >
+            {{筛选显示}}
+          </v-btn>
+      <h4>销量{{item.fields.product_sales}}</h4>
+      <div class="product-color"
+           :style="{background: ccolors[item.fields.product_color]}"></div>
+      <div class="product-cost">￥ {{item.fields.product_cost}}</div>
+      <!-- 阻止冒泡，否则点击按钮的同时也会触发a标签进入详情页 -->
+
+
+  </div>
+
+    </div>
+
+
+
+    <div class="product-not-found"
+         v-show="!filteredAndOrderedList.length">暂无相关商品</div>
+
+
+
+  </div>
 
     <!-- 提示语，之后移至商家暂未通过审核处
     <div>
@@ -137,11 +221,14 @@ function sum(arr) {
           return total + value;
         });
       }
-
+//导入商品简介组件
+import { RegionSelects } from 'v-region'
+import util from "@/components/customer/util";
+//import business_Product from "@/components/business/business_product";
 export default {
   name: "business_saledata",
   components: {
-    LineChart,
+    LineChart,RegionSelects
   },
   data: () => ({
     business_name :"商家lll",
@@ -169,7 +256,29 @@ export default {
     week:[],
 
 
+    list:[],
+    chooseRegion:{
+        province: '',//1
+        city: '',//2
+        area: '',//3
+        town:''
+      },
+    regionState:0,
 
+ccolors: {
+        '白色': '#ffffff',
+        '金色': '#dac272',
+        '蓝色': '#233472',
+        '红色': '#f2352e'
+      },
+
+    //品牌过滤
+      filterBrand: '',
+      //颜色过滤
+      filterColor: '',
+      order: '',
+
+    choosedProduct:[]
 
   }),
 
@@ -197,21 +306,15 @@ export default {
       "周五\n"+formatDate(getWeekStartDate(this.offset,5)),
       "周六\n"+formatDate(getWeekStartDate(this.offset,6)),
       "周日\n"+formatDate(getWeekStartDate(this.offset,7)),]
-console.log("zzzbb")
+
        await this.newWeekChartData()
-       console.log("zzzbbb")
 
      },
 
 
      newWeekChartData(){
-      console.log("zzzc")
        let s = getWeekStartDate(this.offset,1)
        let e = getWeekStartDate(this.offset,8)
-
-       console.log(this.business_orders)
-       console.log(s)
-       console.log(e)
 
        this.week_orders=this.business_orders.filter((item) => {
          var i=item.fields.order_createtime
@@ -220,23 +323,16 @@ console.log("zzzbb")
          return true
        });
 
-       console.log(this.week_orders)
-
        var tmpSales=[0,0,0,0,0,0,0]
        var tmpProfits=[0,0,0,0,0,0,0]
 
        this.week_orders.forEach((item) => {
-         console.log("\nmm")
-         console.log(item.fields.sumnum)
-         console.log(item.fields.sumcost)
-         console.log(this.week[i])
-         console.log(item.fields.order_createtime)
+
          for(var i = 2;i<8;i++){
            if(this.week[i]>item.fields.order_createtime){
              tmpSales[i-1]+=item.fields.sumnum
              tmpProfits[i-1]+=item.fields.sumcost
-             console.log(item.fields.sumnum)
-             console.log(tmpSales[i-1])
+
              break
            }
           }
@@ -258,16 +354,12 @@ console.log("zzzbb")
        var tmpExpenses=[0,0,0,0,0,0,0]
 
        this.week_stocks.forEach((item) => {
-         console.log("\nmm")
-         console.log(item.fields.stocksumnum)
-         console.log(item.fields.stocksumcost)
-         console.log(this.week[i])
-         console.log(item.fields.stock_createtime)
+
          for(var i = 2;i<8;i++){
            if(this.week[i]>item.fields.stock_createtime){
              tmpPurchases[i-1]+=item.fields.stocksumnum
              tmpExpenses[i-1]+=item.fields.stocksumcost
-             console.log("pppppp")
+
              break
 
            }
@@ -277,9 +369,6 @@ console.log("zzzbb")
        lineChartData.purchases=tmpPurchases
        lineChartData.expenses=tmpExpenses
 
-       console.log(lineChartData)
-
-       console.log("zzzccc")
 
        this.indicators[0].text = sum(lineChartData.purchases)+"（件）"
        this.indicators[1].text = sum(lineChartData.sales)+"（件）"
@@ -288,6 +377,27 @@ console.log("zzzbb")
 
      },
 
+     async selectLogs(){
+
+      if(!this.chooseRegion.province) {
+        this.regionState = 0
+      }else if(!this.chooseRegion.city){
+        this.regionState=1
+      }else if(!this.chooseRegion.area){
+        this.regionState=2
+      }else {
+        this.regionState=3
+      }
+
+      console.log(this.regionState)
+       console.log(this.chooseRegion)
+
+      await this.initBusinessOrders()
+    await this.initBusinessStocks()
+
+    await this.newDimension()
+    },
+
      async getProductsList(){
       //从Vuex获取商品列表信息
       //return this.$store.state.productList;
@@ -295,6 +405,8 @@ console.log("zzzbb")
         .then((response) => {
             console.log(response.data.list);
             var tmp = response.data.list.filter(i => i.fields.product_business === this.$store.state.userId)
+          this.list=response.data.list.filter(i => i.fields.product_business === this.$store.state.userId)
+          this.choosedProduct=response.data.list.filter(i => i.fields.product_business === this.$store.state.userId)
            tmp.forEach(item => {
           this.nowProduct[item.pk] = item;
 
@@ -306,9 +418,6 @@ console.log("zzzbb")
 
 
   async initBusinessOrders(){
-
-
-
       await this.axios.get('show_business_orderProduct/',{params:{business_id: this.$store.state.userId}})
         .then((response) => {
             console.log(response);
@@ -344,15 +453,40 @@ console.log("zzzbb")
                     };
                     var sum=0.0
                     var num=0
+
+                    var regionRight =0
+              if(this.regionState===1){
+                if(item.fields['region'].province!==this.chooseRegion.province){
+                  regionRight=1}
+
+              }else if(this.regionState===2){
+                if(item.fields['region'].province!==this.chooseRegion.province){
+                  regionRight=1
+                }else if(item.fields['region'].city!==this.chooseRegion.city){
+                  regionRight=1
+                }
+              }else if(this.regionState===3){
+                if(item.fields['region'].province!==this.chooseRegion.province){
+                  regionRight=1
+                }else if(item.fields['region'].city!==this.chooseRegion.city){
+                  regionRight=1
+                }else if(item.fields['region'].area!==this.chooseRegion.area){
+                  regionRight=1
+                }
+
+              }
+              if(regionRight===0){
                     this.orderProducts.forEach(tt => {
 
                       if(tt.fields.order_id==item.pk){
-                        sum+=(tt.fields.num-0.0)*(parseFloat(tt.fields.order_product_cost))
-                        num+=tt.fields.num
-                        console.log(num);
-                        console.log(sum);
+                        if(this.choosedProduct.find(m => m.pk===tt.fields.product_id)) {
+                          sum += (tt.fields.num - 0.0) * (parseFloat(tt.fields.order_product_cost))
+                          num += tt.fields.num
+                          console.log(num);
+                          console.log(sum);
+                        }
                       }
-                    });
+                    });}
                     item.fields['sumcost']=sum;//每一个订单的销售额
                     item.fields['sumnum']=num;//每一个订单的销售量
 
@@ -379,6 +513,7 @@ console.log("zzzbb")
                     var stocksum=0.0
                     var stocknum=0
                     this.business_stocks.forEach(tt => {
+
                       if(tt.fields.product_id==item.pk){
                         stocksum+=(tt.fields.stock_num-0.0)*(tt.fields.stock_cost)
                         stocknum+=tt.fields.stock_num
@@ -401,9 +536,39 @@ console.log("zzzbb")
                       town:''
                     };
 
-                    item.fields['stocksumcost']=(item.fields.stock_num-0.0)*(item.fields.stock_cost);//每一个订单的支出
-                    item.fields['stocksumnum']=item.fields.stock_num;//每一个订单的采购数量
+                    var regionRight =0
+              if(this.regionState===1){
+                if(item.fields['region'].province!==this.chooseRegion.province){
+                  regionRight=1}
 
+              }else if(this.regionState===2){
+                if(item.fields['region'].province!==this.chooseRegion.province){
+                  regionRight=1
+                }else if(item.fields['region'].city!==this.chooseRegion.city){
+                  regionRight=1
+                }
+              }else if(this.regionState===3){
+                if(item.fields['region'].province!==this.chooseRegion.province){
+                  regionRight=1
+                }else if(item.fields['region'].city!==this.chooseRegion.city){
+                  regionRight=1
+                }else if(item.fields['region'].area!==this.chooseRegion.area){
+                  regionRight=1
+                }
+
+              }
+              if(regionRight===0){
+
+                    if(this.choosedProduct.find(m => m.pk===item.fields.product_id)) {
+                      item.fields['stocksumcost'] = (item.fields.stock_num - 0.0) * (item.fields.stock_cost);//每一个订单的支出
+                      item.fields['stocksumnum'] = item.fields.stock_num;//每一个订单的采购数量
+                    }else{
+                      item.fields['stocksumcost'] = 0.0;//每一个订单的支出
+                      item.fields['stocksumnum'] = 0;//每一个订单的采购数量
+                    }}else{
+                      item.fields['stocksumcost'] = 0.0;//每一个订单的支出
+                      item.fields['stocksumnum'] = 0;//每一个订单的采购数量
+                    }
                 });
             console.log(this.business_stocks);
         })
@@ -413,16 +578,131 @@ console.log("zzzbb")
 
     },
 
+     async fixedChoosed(){
+      let list = [...this.list];
+      //品牌过滤
+      if(this.filterBrand !== ''){
+        list = list.filter(item => item.fields.product_brand === this.filterBrand);
+      }
+      //颜色过滤
+      if(this.filterColor !== ''){
+        list = list.filter(item => item.fields.product_color === this.filterColor);
+      }
+      //排序
+      if(this.order !== ''){
+        if(this.order === 'sales'){
+          list = list.sort((a, b) => b.fields.product_sales - a.fields.product_sales);
+        }else if(this.order === 'cost-desc'){
+          list = list.sort((a, b) => b.fields.product_cost - a.fields.product_cost);
+        }else if(this.order === 'cost-asc'){
+          list = list.sort((a, b) => a.fields.product_cost - b.fields.product_cost);
+        }
+      }
+      this.choosedProduct=[...list]
+       await this.initBusinessOrders()
+    await this.initBusinessStocks()
+
+    await this.newDimension()
+     },
+
+     async ttt(id){
+
+      this.choosedProduct=this.list.filter(item => item.pk === id);
+      await this.initBusinessOrders()
+    await this.initBusinessStocks()
+
+    await this.newDimension()
+     },
+
+
+
+     //品牌筛选
+    async handleFilterBrand(brand){
+      //点击品牌过滤，再次点击取消
+      if (this.filterBrand === brand) {
+        this.filterBrand = '';
+      }else{
+        this.filterBrand = brand;
+      }
+      await this.fixedChoosed()
+    },
+    //颜色筛选
+    async handleFilterColor(color){
+      //点击颜色过滤，再次点击取消
+      if (this.filterColor === color) {
+        this.filterColor = '';
+      }else{
+        this.filterColor = color;
+      }
+      await this.fixedChoosed()
+    },
+    async handleOrderDefault(){
+      this.order = '';
+      await this.fixedChoosed()
+    },
+    async handleOrderSales(){
+      this.order = 'sales';
+      await this.fixedChoosed()
+    },
+    handleOrderCost(){
+      //当点击升序时将箭头更新↓,降序设置为↑
+      if(this.order === 'cost-desc'){
+        this.order = 'cost-asc';
+      }else{
+        this.order = 'cost-desc';
+      }
+    },
+
   },
   async created(){
     await this.getProductsList()
     await this.initBusinessOrders()
     await this.initBusinessStocks()
-    console.log("zzz")
+
     await this.newDimension()
-    console.log("zzzzz")
-    console.log(lineChartData)
-    console.log(this.dimension)
+
+
+
+  },
+  computed:{
+    brands(){
+
+      const brands = this.list.map(item => item.fields.product_brand);
+
+      return util.getFilterArray(brands);
+
+    },
+    colors(){
+      const colors = this.list.map(item => item.fields.product_color);
+      return util.getFilterArray(colors);
+    },
+    filteredAndOrderedList(){
+      //拷贝原数组
+      let list = [...this.list];
+      //品牌过滤
+      if(this.filterBrand !== ''){
+        list = list.filter(item => item.fields.product_brand === this.filterBrand);
+      }
+      //颜色过滤
+      if(this.filterColor !== ''){
+        list = list.filter(item => item.fields.product_color === this.filterColor);
+      }
+      //排序
+      if(this.order !== ''){
+        if(this.order === 'sales'){
+          list = list.sort((a, b) => b.fields.product_sales - a.fields.product_sales);
+        }else if(this.order === 'cost-desc'){
+          list = list.sort((a, b) => b.fields.product_cost - a.fields.product_cost);
+        }else if(this.order === 'cost-asc'){
+          list = list.sort((a, b) => a.fields.product_cost - b.fields.product_cost);
+        }
+      }
+      console.log("kkk")
+      console.log(this.list)
+      console.log(list)
+
+      return list;
+    }
   },
    mounted() {
     getHomePanels()
@@ -456,7 +736,7 @@ console.log("zzzbb")
 };
 </script>
 
-<style>
+<style scoped>
 .item-card {
   transition: opacity 0.4s ease-in-out;
 }
@@ -467,5 +747,132 @@ console.log("zzzbb")
 
 .line-chart {
   background: #fff;
+}
+
+.list-control{
+  background: #fff;
+  border-radius: 6px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.2);
+}
+.list-control-filter{
+  margin-bottom: 16px;
+}
+
+.container {
+
+  width: 500px;
+
+  margin: 50px auto;
+
+  overflow: hidden;
+
+  border: 1px solid #ccc;
+
+}
+.bar1 {background: #A3D0C3; }
+.bar1 input {
+  border: 2px solid #7BA7AB;
+  border-radius: 5px;
+  background: #F9F0DA;
+  color: #9E9C9C;
+}
+.bar1 button {
+  top: 0;
+  right: 0;
+  background: #7BA7AB;
+  border-radius: 0 5px 5px 0;
+}
+.bar1 button:before {
+  font-family: FontAwesome,serif;
+  font-size: 16px;
+  color: #F9F0DA;
+}
+.list-control-filter-item,
+.list-control-order-item {
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid #e9eaec;
+  border-radius: 4px;
+  margin-right: 6px;
+  padding: 2px 6px;
+}
+.list-control-filter-item.on,
+.list-control-order-item.on{
+  background: #f2352e;
+  border: 1px solid #f2352e;
+  color: #fff;
+}
+.product-not-found{
+  text-align: center;
+  padding: 32px;
+}
+.like {
+  width: 1000px;
+
+  margin: 50px auto;
+
+  overflow: hidden;
+
+  border: 1px solid #ccc;
+}
+.likeItem {
+  display:inline-block; width:200px; height:200px;
+}
+
+.product{
+  width: 330px;
+  float: left;
+}
+.product-main{
+  display: block;
+  margin: 16px;
+  padding: 16px;
+  border: 1px solid #dddee1;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  text-align: center;
+  position: relative;
+}
+.product-main img{
+  width: 100%;
+}
+h4{
+  color: #222;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.product-main:hover h4{
+  color: #0070c9;
+}
+.product-color{
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #dddee1;
+  border-radius: 50%;
+  margin: 6px auto;
+}
+.product-cost{
+  color: #de4037;
+  margin-top: 6px;
+}
+.product-add-cart{
+  display: none;
+  padding: 4px 8px;
+  background: #2d8cf0;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.product-main:hover .product-add-cart{
+  display: inline-block;
 }
 </style>

@@ -150,6 +150,9 @@ export default {
 body{
   margin:0;
 }
+.container {
+  position: center;
+ }
 
 .bar1 {background: #A3D0C3; }
 .bar1 input {
