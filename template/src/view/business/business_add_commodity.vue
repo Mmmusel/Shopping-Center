@@ -127,12 +127,12 @@ export default {
         // TODO：商品进价/商品售价
         product_brand: "", // 商品库存
         product_cost: "", // 商品库存
-        product_image1: "", // 主页图片
-        product_image2: ""
+        product_image1: 'http://127.0.0.1:8000/media/avatar/default_pic.jpg', // 主页图片
+        product_image2: 'http://127.0.0.1:8000/media/avatar/default_pic.jpg'
         // TODO：细节图片
       },
-      showPic1:"",
-      showPic2:"",
+      showPic1:'http://127.0.0.1:8000/media/avatar/default_pic.jpg',
+      showPic2:'http://127.0.0.1:8000/media/avatar/default_pic.jpg',
       formEmptyRule: [required("此栏目")],
       costRule:[required("此栏目"),
           function (v) {

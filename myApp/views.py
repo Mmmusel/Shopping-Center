@@ -77,6 +77,15 @@ def add_product(request):
     product_business_obj = UserInfo.objects.get(id=iid)
     product_Info = json.loads(request.FILES.get('forms').read())
 
+    if request.FILES.get('product_image1'):
+        product_image1 = request.FILES.get('product_image1')
+    else:
+        product_image1 = 'avatar/default_pic.jpg'
+    if request.FILES.get('product_image2'):
+        product_imageDetail1 = request.FILES.get('product_image2')
+    else:
+        product_imageDetail1 = 'avatar/default_pic.jpg'
+
     response = {}
     if request.method == 'POST':
         #goods_image = request.FILES.get('goods_image')
@@ -94,8 +103,8 @@ def add_product(request):
 
                           product_cost=t,
                           product_color=product_Info['product_color'],
-                          product_image=request.FILES.get('product_image1'),
-                          product_imageDetail=request.FILES.get('product_image2'),
+                          product_image=product_image1,
+                          product_imageDetail=product_imageDetail1,
         product_business=product_business_obj,
                           product_status='申请上架'
 
@@ -110,8 +119,8 @@ def add_product(request):
 
                           product_cost=t,
                           product_color=product_Info['product_color'],
-                          product_image=request.FILES.get('product_image1'),
-                          product_imageDetail=request.FILES.get('product_image2'),
+                          product_image=product_image1,
+                          product_imageDetail=product_imageDetail1,
                           product_business=product_business_obj,
                           product_status='申请上架',
             check_status='待审核'

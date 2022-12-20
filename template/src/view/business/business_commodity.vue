@@ -35,37 +35,6 @@
           </v-row>
         </template>
 
-<!--
-        <template v-slot:default="props">
-          <v-row>
-            <v-col
-                v-for="item in props.items"
-                :key="item.fields.product_name"
-                cols="12"
-                sm="6"
-                md="4"
-                lg="3"
-            >
-              <v-card>
-                <v-card-title class="subheading font-weight-bold">{{ item.fields.product_name }}</v-card-title>
-
-                <v-divider></v-divider>
-
-                <v-list dense>
-                  <v-list-item
-                      v-for="(key, index) in myFilteredKeys"
-                      :key="index"
-                  >
-                    <v-list-item-content>{{ key }}:</v-list-item-content>
-                    <v-list-item-content class="align-end">{{ item.fields[key] }}</v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-card>
-            </v-col>
-          </v-row>
-        </template>
-        -->
-
         <template v-slot:footer>
           <v-row class="mt-2" align="center" justify="center">
             <span class="grey--text">Items per page</span>
@@ -279,9 +248,6 @@ export default {
       this.upload_file=null
       let that = this;
       const files = e.target.files;
-
-
-
 
 
       if (files.length <= 0) {

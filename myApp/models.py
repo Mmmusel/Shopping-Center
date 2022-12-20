@@ -13,7 +13,7 @@ class UserInfo(models.Model):
 
     user_address = models.CharField(max_length=64,null=True)
     user_mobile = models.CharField(max_length=64, null=True)
-    user_avatar = models.ImageField(upload_to="user_avatar/",null=True)
+    user_avatar = models.ImageField(upload_to="user_avatar/",null=True,default="user_avatar/default_avatar.jpg")
     user_createtime = models.DateField(auto_now_add=True,null=True)
 
     user_province = models.CharField(max_length=16,null=True)
@@ -133,8 +133,8 @@ class CheckProduct(models.Model):
     product_cost = models.DecimalField(max_digits=9, decimal_places=2)
     #product_sales = models.IntegerField()
     product_color = models.CharField(max_length=20)
-    product_image = models.ImageField(upload_to="avatar/")
-    product_imageDetail = models.ImageField(upload_to="avatar/")
+    product_image = models.ImageField(upload_to="avatar/",default='avatar/default_pic.jpg')
+    product_imageDetail = models.ImageField(upload_to="avatar/",default='avatar/default_pic.jpg')
 
     product_business = models.ForeignKey("UserInfo", on_delete=models.CASCADE, null=True)
     #product_stock = models.IntegerField(null=True)
