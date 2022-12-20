@@ -25,10 +25,10 @@
           class="pa-4"
       >
         <v-avatar color="blue">
-          <span class="white--text text-h5">CJ</span>
-        </v-avatar>
+            <span class="white--text text-h5">{{ this.user }}</span>
+          </v-avatar>
 
-        <div>12345678</div>
+          <div>{{ this.user }}</div>
       </v-row>
 
       <v-divider></v-divider>
@@ -76,11 +76,22 @@ export default {
 
   data: () => ({
     drawer: null,
+    user:"",
     links:[{ text: '审核商品', icon: 'mdi-inbox-arrow-down',route:"/manager/check"},
       { text: '登录日志', icon: 'mdi-send',route:"/manager/log"},
       { text: '操作日志', icon: 'mdi-delete',route:"/manager/actionlog"},
       ],
   }),
+  async created(){
+    await this.axios.get('userId2userName/',{params:{user_id: this.$store.state.userId}})
+        .then((response) => {
+
+            this.user = response.data.user_name
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+  }
 };
 </script>
 

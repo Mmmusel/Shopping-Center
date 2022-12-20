@@ -25,10 +25,10 @@
           class="pa-4"
       >
         <v-avatar color="blue">
-          <span class="white--text text-h5">CJ</span>
-        </v-avatar>
+            <span class="white--text text-h5">{{ this.user }}</span>
+          </v-avatar>
 
-        <div>12345678</div>
+          <div>{{ this.user }}</div>
       </v-row>
 
       <v-divider></v-divider>
@@ -76,11 +76,22 @@ export default {
 
   data: () => ({
     drawer: null,
-    links:[{ text: '订单信息', icon: 'mdi-inbox-arrow-down',route:"/business/order"},
-      { text: '上架商品', icon: 'mdi-send',route:"/business/commodity"},
-      { text: '销售数据', icon: 'mdi-delete',route:"/business/saledata"},
-      { text: '店铺信息', icon: 'mdi-alert-octagon',route:"/business/information"},],
+    user:"",
+    links:[{ text: '订单信息', icon: 'mdi-cash-refund',route:"/business/order"},
+      { text: '上架商品', icon: 'mdi-dolly',route:"/business/commodity"},
+      { text: '销售数据', icon: 'mdi-inbox-arrow-down',route:"/business/saledata"},
+      { text: '店铺信息', icon: 'mdi-send',route:"/business/information"},],
   }),
+  async created(){
+    await this.axios.get('userId2userName/',{params:{user_id: this.$store.state.userId}})
+        .then((response) => {
+
+            this.user = response.data.user_name
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+  }
 };
 </script>
 

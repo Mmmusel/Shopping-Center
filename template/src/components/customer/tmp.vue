@@ -25,10 +25,10 @@
         >
 
           <v-avatar color="blue">
-            <span class="white--text text-h5">CJ</span>
+            <span class="white--text text-h5">{{ this.user }}</span>
           </v-avatar>
 
-          <div>12345678</div>
+          <div>{{ this.user }}</div>
         </v-row>
 
         <v-divider></v-divider>
@@ -74,11 +74,28 @@ export default {
 
   data: () => ({
     cards: ['Today', 'Yesterday'],
+    user:'',
     drawer: null,
     links:[{ text: '首页', icon: 'mdi-inbox-arrow-down',route:"/customerHome"},
-          { text: '个人中心', icon: 'mdi-send',route:"/customerPerson"},
-          { text: '历史订单', icon: 'mdi-alert-octagon',route:"/customerOrder2"},],
+          { text: '购物车', icon: 'mdi-dolly',route:"/cart"},
+          { text: '历史订单', icon: 'mdi-cash-refund',route:"/customerOrder2"},
+        { text: '个人中心', icon: 'mdi-send',route:"/customerPerson"},
+
+
+
+
+    ],
   }),
+  async created(){
+    await this.axios.get('userId2userName/',{params:{user_id: this.$store.state.userId}})
+        .then((response) => {
+
+            this.user = response.data.user_name
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+  }
 };
 </script>
 

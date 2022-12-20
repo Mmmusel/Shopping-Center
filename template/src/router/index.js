@@ -57,6 +57,13 @@ export default new Router({
             },
             component: (resolve) => require(['../components/customer/customer_searchout.vue'], resolve)
         },
+                {
+            path: '/test',
+            meta: {
+                title: '购物车'
+            },
+            component: (resolve) => require(['../view/manager/data_card.vue'], resolve)
+        },
         {
             path: '/cart',
             meta: {

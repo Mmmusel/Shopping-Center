@@ -47,7 +47,7 @@
               </download-excel>
               </template>
     <!--删除删除 TODO
-    -->
+
     <div class="container">
       {{ upload_file || "导入" }}
       <input
@@ -56,7 +56,7 @@
         class="upload_file"
         @change="readExcel($event)"
       />
-    </div>
+    </div>-->
     <!-- todo -->
     <div>
       <region-selects
@@ -323,10 +323,14 @@ export default {
     regionState:0,
 
 ccolors: {
+
         '白色': '#ffffff',
+        '黑色': '#100f0f',
+        '灰色': '#a39f9f',
         '金色': '#dac272',
         '蓝色': '#233472',
         '红色': '#f2352e'
+
       },
 
     //品牌过滤
@@ -405,6 +409,7 @@ ccolors: {
       console.log("zzzb")
       for(var i = 1;i<8;i++){
        this.week[i]=getWeekStartDate(this.offset,i)
+
       }
 
       this.dimension= ["周一\n"+formatDate(getWeekStartDate(this.offset,1)),
@@ -434,16 +439,28 @@ ccolors: {
        var tmpSales=[0,0,0,0,0,0,0]
        var tmpProfits=[0,0,0,0,0,0,0]
 
+       console.log(this.week)
+
        this.week_orders.forEach((item) => {
 
          for(var i = 2;i<8;i++){
            if(this.week[i]>item.fields.order_createtime){
-             tmpSales[i-1]+=item.fields.sumnum
-             tmpProfits[i-1]+=item.fields.sumcost
+             tmpSales[i-2]+=item.fields.sumnum
+             tmpProfits[i-2]+=item.fields.sumcost
+
+             console.log(item.fields.order_createtime)
+             console.log(this.week[i])
+             console.log(i)
+             console.log(tmpSales)
 
              break
            }
+           if(i==7){
+             tmpSales[6]+=item.fields.sumnum
+             tmpProfits[6]+=item.fields.sumcost
+           }
           }
+
 
        });
        lineChartData.sales=tmpSales
@@ -456,6 +473,8 @@ ccolors: {
          if(i>=e) return false
          return true
        });
+       console.log(s)
+       console.log(e)
        console.log(this.week_stocks)
 
        var tmpPurchases=[0,0,0,0,0,0,0]
@@ -465,13 +484,18 @@ ccolors: {
 
          for(var i = 2;i<8;i++){
            if(this.week[i]>item.fields.stock_createtime){
-             tmpPurchases[i-1]+=item.fields.stocksumnum
-             tmpExpenses[i-1]+=item.fields.stocksumcost
+             tmpPurchases[i-2]+=item.fields.stocksumnum
+             tmpExpenses[i-2]+=item.fields.stocksumcost
 
              break
 
            }
+           if(i==7){
+             tmpPurchases[6]+=item.fields.stocksumnum
+         tmpExpenses[6]+=item.fields.stocksumcost
+           }
           }
+
 
        });
        lineChartData.purchases=tmpPurchases

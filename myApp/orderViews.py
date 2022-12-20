@@ -219,6 +219,8 @@ def add_order(request):
                                                 num = i.num,
                                                 order_product_cost=raw_product.product_cost)
                     order_items.save()
+                    raw_product.product_sales=raw_product.product_sales+i.num
+                    raw_product.save()
 
 
         response['msg'] = 'success'

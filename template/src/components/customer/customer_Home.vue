@@ -8,9 +8,7 @@
         <router-link to="/customerHome"
                      class="header-title">电商网站首页</router-link>
     <br><br>
-    <v-avatar class="name" color="orange" size="62">
-      <span class="white--text headline">{{user}}</span>
-    </v-avatar>
+
 
         <!--
         {% csrf_token %}
@@ -23,7 +21,7 @@
             <el-button type="primary" @click="onSubmit">确认添加</el-button>
           </el-form-item>
         </el-form>
-        -->
+
         <div class="header-menu">
           <router-link to="/cart"
                        class="header-menu-cart">
@@ -31,8 +29,20 @@
             <span v-if="cartList.length">{{cartList.length}}</span>
           </router-link>
         </div>
+        -->
 
         <!--搜索框-->
+        <div class="searchBox">
+    <input type="text" v-model="inputText" placeholder="请输入关键词进行搜索" class="searchInput" style="padding-left: 10px;">
+    <input type="button"  @click="Click" value="搜索" class="searchButton">
+  </div>
+<div class="header-menu" style="float: right">
+  <v-avatar color="teal" size="48">
+    <span class="white--text headline">{{this.user}}</span>
+  </v-avatar>
+</div>
+        <br><br>
+         <!--
     <div class="container" id="div1" align="center">
       <v-row align="center">
       <div class="search_bar1">
@@ -46,7 +56,7 @@
         </div>
     </v-row>
     </div>
-        <!--
+
         <div class="header-menu">
           <router-link to="/login/logout"
                        class="header-menu-cart">
@@ -130,10 +140,7 @@ export default {
   async created(){
     await this.axios.get('userId2userName/',{params:{user_id: this.$store.state.userId}})
         .then((response) => {
-          console.log("ttttttttttttttttt");
-            console.log(this.$store.state.userId);
-            console.log(response.data.user_name);
-            console.log("ttttttttttttttttt");
+
             this.user = response.data.user_name
         })
         .catch(function (error) {
@@ -154,6 +161,39 @@ export default {
 body{
   margin:0;
 }
+
+.searchBox{
+  margin: 0 auto;
+  width: 40%;
+  position: relative;
+}
+.searchInput{
+  display: inline-block;
+  width: 85%;
+  height: 38px;
+  border: 1px solid #cccccc;
+  float: left;
+  box-sizing: border-box;
+  -moz-box-sizing:border-box; /* Firefox */
+  -webkit-box-sizing:border-box; /* Safari */
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.searchButton{
+  display: inline-block;
+  width: 10%;
+  height: 38px;
+  line-height: 40px;
+  float: left;
+  background-color: #00a0e9;
+  font-size: 16px;
+  cursor: pointer;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  border: none;
+  color: #fff;
+}
+
 
 .container {
   width: 5000px;

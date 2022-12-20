@@ -7,7 +7,12 @@
       </div>
       <div class="product-info">
         <h1 class="product-name">{{product.fields.product_name}}</h1>
-        <div class="product-cost">{{product.fields.product_cost}}</div>
+        <div class="product-cost">商品库存：{{product.fields.product_stock}}</div>
+        <div class="product-cost">商品销量：{{product.fields.product_sales}}</div>
+        <div class="product-cost">商品单价：{{product.fields.product_cost}}</div>
+        <div class="product-cost">商品品牌：{{product.fields.product_brand}}</div>
+        <div class="product-cost">商品颜色：{{product.fields.product_color}}</div>
+
         <div class="product-add-cart" @click="handleAddCart">加入购物车</div>
       </div>
 

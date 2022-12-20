@@ -27,10 +27,12 @@ export default {
     return {
       colors: {
         '白色': '#ffffff',
+        '黑色': '#100f0f',
+        '灰色': '#a39f9f',
         '金色': '#dac272',
         '蓝色': '#233472',
         '红色': '#f2352e'
-      }
+      },
     }
   },
   methods: {

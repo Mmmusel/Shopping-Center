@@ -230,20 +230,20 @@ export default {
               if(m.data.user_mobile===""){
                 console.log("null")
                 window.alert("请完善联系方式")
-                this.$router.push({path: '/business/business_information'})
+                this.$router.push({path: '/business/information'})
                 return
               }
 
               if((m.data.user_province==="")||(m.data.user_city==="")||(m.data.user_area==="")){
                 window.alert("请完善地址")
-                this.$router.push({path: '/business/business_information'})
+                this.$router.push({path: '/business/information'})
                 return
               }
 
 
               if(m.data.user_address===""){
                 window.alert("请完善详细地址")
-                this.$router.push({path: '/business/business_information'})
+                this.$router.push({path: '/business/information'})
                 return
               }
       this.$router.push({path: '/business/commodity/add_commodity'})

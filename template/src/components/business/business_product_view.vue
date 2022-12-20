@@ -6,8 +6,14 @@
         <img :src="`http://127.0.0.1:8000/media/${product.fields.product_image}`" alt="">
       </div>
       <div class="product-info">
+        <h1 class="product-name">商品id：{{product.pk}}</h1>
         <h1 class="product-name">{{product.fields.product_name}}</h1>
-        <div class="product-cost">{{product.fields.product_cost}}</div>
+        <div class="product-cost">商品库存：{{product.fields.product_stock}}</div>
+        <div class="product-cost">商品销量：{{product.fields.product_sales}}</div>
+        <div class="product-cost">商品单价：{{product.fields.product_cost}}</div>
+        <div class="product-cost">商品品牌：{{product.fields.product_brand}}</div>
+        <div class="product-cost">商品颜色：{{product.fields.product_color}}</div>
+        <div class="product-cost">商品状态：{{product.fields.product_status}}</div>
         <div class="product-add-cart" v-if="isOn" @click="handleAddCart">编辑商品</div>
         <div class="product-add-cart" v-if="isOn" @click="removePro">下架商品</div>
         <div class="product-add-cart" v-if="!isOn" @click="handleAddCart">编辑并上架商品</div>
