@@ -67,6 +67,25 @@ class CartItems(models.Model):
     product_id = models.ForeignKey("Product",on_delete=models.CASCADE)
     num = models.IntegerField()
 
+class LikeList(models.Model):
+    user_id = models.ForeignKey("UserInfo", on_delete=models.CASCADE)
+    product_id = models.ForeignKey("Product", on_delete=models.CASCADE)
+
+class StarList(models.Model):
+    star_customer_id = models.ForeignKey("UserInfo", related_name='star_customer', on_delete=models.CASCADE)
+    star_business_id = models.ForeignKey("UserInfo", related_name='star_business', on_delete=models.CASCADE)
+
+
+class Comment(models.Model):
+    user_id = models.ForeignKey("UserInfo", on_delete=models.CASCADE)
+    product_id = models.ForeignKey("Product", on_delete=models.CASCADE)
+    comment_createtime = models.DateTimeField(auto_now_add=True)
+
+    comment_text=models.CharField(max_length=200)
+    comment_image1 = models.ImageField(upload_to="comments/")
+    comment_image2 = models.ImageField(upload_to="comments/")
+    comment_image3 = models.ImageField(upload_to="comments/")
+    comment_value = models.IntegerField()
 
 class Product(models.Model):
     product_name = models.CharField(max_length = 100)

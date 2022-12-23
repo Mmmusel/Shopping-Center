@@ -22,6 +22,7 @@ from django.views.generic import TemplateView
 from myApp import views as BookView
 from myApp import cartViews as CartView
 from myApp import orderViews as OrderView
+from myApp import likeStarView as StarView
 
 from django.urls import re_path
 from django.conf import settings
@@ -61,9 +62,13 @@ urlpatterns = [
     path('alterOrderStatus/',OrderView.alterOrderStatus),
     path('show_business_orderProduct_status/',OrderView.show_business_orderProduct_status),
 
+    path('get_user_like_to_product/',StarView.get_user_like_to_product),
+    path('toggle_user_like_to_product/',StarView.toggle_user_like_to_product),
+    path('get_product_likes',StarView.get_product_likes),
 
     re_path(r'^media/avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'avatar/')}),
     re_path(r'^media/user_avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'user_avatar/')}),
+    re_path(r'^media/comments/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'user_avatar/')}),
 
     #re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     path("",TemplateView.as_view(template_name="index.html"))

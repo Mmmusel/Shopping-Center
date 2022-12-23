@@ -10,6 +10,22 @@
         <div class="product-cost">{{product.fields.product_cost}}</div>
         <div class="product-add-cart" @click="handleAddCart">加入购物车</div>
       </div>
+
+
+
+      <div>
+        <span class="fillheart" v-if="begood" @click="changeGood">
+            <font-awesome-icon :icon="['fas', 'heart']" class="icon righticon" ></font-awesome-icon>
+        </span>
+        <span class="heart" v-if="!begood" @click="changeGood">
+            <font-awesome-icon :icon="['fas', 'heart']" class="icon righticon" ></font-awesome-icon>
+
+        </span>
+
+        <span class="word">{{product_goods}}</span>
+    </div>
+
+
     </div>
     <div class="product-desc">
       <h2>产品介绍</h2>
@@ -27,10 +43,61 @@ export default {
     return {
       //获取路由中的参数
       id: parseInt(this.$route.params.id),
-      product: null
+      product: null,
+      product_goods:0,
+      begood:true,
     }
   },
   methods: {
+    async getProductLikes(){
+      await this.axios.get('get_product_likes/',
+            {params:{ product_id: this.id}})
+        .then((response) => {
+            console.log(response);
+           this.product_goods=response.data.goods
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    },
+    async changeGood(){
+      if(this.begood){
+        this.product_goods-=1
+      }else{
+        this.product_goods+=1
+      }
+      this.begood=!this.begood
+
+      await this.axios.get('toggle_user_like_to_product/',
+            {params:{user_id: this.$store.state.userId, product_id: this.id}})
+        .then((response) => {
+            console.log(response);
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    },
+    async initUserToProduct(){
+      await this.axios.get('get_user_like_to_product/',
+            {params:{user_id: this.$store.state.userId, product_id: this.id}})
+        .then((response) => {
+            console.log(response);
+            //this.list = response.data.list
+          if(response.data.good==='good'){
+            this.begood=true
+          }else{
+            this.begood=false
+          }
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    },
+
+
     async getProduct(x1){
       await this.axios.get('fetch_product/',{params:{product_id: x1}})
         .then((response) => {
@@ -42,8 +109,18 @@ export default {
 
         });
     },
-    handleAddCart(){
-      this.$store.commit('addCart', this.id)
+    async handleAddCart(){
+
+      await this.axios.get('add_to_cart/',
+            {params:{user_id: this.$store.state.userId, product_id: this.id}})
+        .then((response) => {
+            console.log(response);
+            //this.list = response.data.list
+            window.alert("添加成功")
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
   },
   async created(){
@@ -53,6 +130,8 @@ export default {
     await this.getProduct(this.id)
     console.log("detailviewend");
     console.log(this.product)
+    await this.initUserToProduct()
+    await this.getProductLikes()
 
   },
 
@@ -69,6 +148,20 @@ export default {
 </script>
 <!-- scoped属性表示只对当前组件有效，不影响其他组件 -->
 <style scoped>
+.word{
+   font-size: 32px;
+}
+.fillheart{
+color: red;
+
+        font-size: 32px;
+}
+.heart{
+color: gray;
+
+        font-size: 32px;
+}
+
 .product{
   margin: 32px;
   padding: 32px;

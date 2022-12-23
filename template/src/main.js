@@ -10,10 +10,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@mdi/font/css/materialdesignicons.css'
 
 import { RegionSelects } from 'v-region'
-
+import JsonExcel from 'vue-json-excel'
+Vue.component('downloadExcel', JsonExcel)
 Vue.component('v-region-selects', RegionSelects)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+
+import fontawesomeUI from './utils/fontawesomeUI'
+Vue.component('font-awesome-icon', fontawesomeUI);
 
 Vue.filter('format', function(date) {
     //var json_date = new Date(date).toJSON();

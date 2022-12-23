@@ -124,6 +124,16 @@
         </template>
       </v-data-iterator>
     </v-container>
+    <div class="container">
+      {{ upload_file || "导入" }}
+      <input
+        type="file"
+        accept=".xls,.xlsx"
+        class="upload_file"
+        @change="readExcel($event)"
+      />
+      <el-button type="success" @click="addExcelStock">导入excel库存</el-button>
+    </div>
     <v-btn
       class="ma-2"
       color="success"
@@ -131,11 +141,13 @@
     >
       添加商品
     </v-btn>
+
   </div>
 </template>
 
 <script>
 import business_Product from "@/components/business/business_product";
+import {read, utils} from "xlsx";
 
 export default {
   name: "business_commodity",
@@ -145,6 +157,7 @@ export default {
   },
   data () {
     return {
+      excelParseData:[],
       itemsPerPageArray: [4, 8, 12],
       search: '',
       filter: {},
@@ -162,37 +175,6 @@ export default {
           库存: 10000,
           金额: "5000元",
         },
-        {
-          name: "面包",
-          库存: 50000,
-          金额: "3元",
-        },
-        {
-          name: "牛奶1",
-          库存: 1000,
-          金额: "5元",
-        },
-        {
-          name: "牛奶2",
-          库存: 1000,
-          金额: "5元",
-        },
-        {
-          name: "牛奶3",
-          库存: 1000,
-          金额: "5元",
-        },
-        {
-          name: "牛奶4",
-          库存: 1000,
-          金额: "5元",
-        },
-        {
-          name: "牛奶5",
-          库存: 1000,
-          金额: "5元",
-        },
-
       ],
     }
   },
@@ -238,7 +220,86 @@ export default {
 
     addCommodity() {
       this.$router.push({path: '/business/commodity/add_commodity'})
-    }
+    },
+    addExcelStock(){
+      console.log(this.excelParseData)
+      if(!this.upload_file){
+        window.alert("导入文件为空")
+      }else{
+        this.excelParseData.forEach(async (item) =>{
+          await this.axios.get('add_product_stock/',
+          {params:{product_id: item.product_id,stock:item.stock_num,cost:item.stock_cost}})
+        .then((response) => {
+            console.log(response);
+
+        })
+        .catch(function (error) {
+            console.log(error);
+
+        })
+        })
+        this.upload_file=null
+        this.excelParseData=[]
+
+      window.alert("库存添加成功")
+      }
+    },
+
+
+    readExcel(e) {
+      // 读取表格文件
+      this.excelParseData=[]
+      this.upload_file=null
+      let that = this;
+      const files = e.target.files;
+
+
+
+
+
+      if (files.length <= 0) {
+        return false;
+      } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+        this.$message({
+          message: "上传格式不正确，请上传xls或者xlsx格式",
+          type: "warning"
+        });
+        return false;
+      } else {
+        // 更新获取文件名
+        that.upload_file = files[0].name;
+      }
+
+
+
+      const fileReader = new FileReader();
+      fileReader.onload = ev => {
+        try {
+          const data = ev.target.result;
+
+          const workbook = read(data, {
+            type: "binary"
+          });
+
+          const wsname = workbook.SheetNames[0]; //取第一张表
+          const ws = utils.sheet_to_json(workbook.Sheets[wsname]); //生成json表格内容
+          //ws就是读取的数据（不包含标题行即表头，表头会作为对象的下标）
+
+          //this.submit_form();
+
+					console.log(ws);
+          this.excelParseData=ws
+          console.log(this.excelParseData);
+
+        } catch (e) {
+
+          console.log(e);
+          return false;
+        }
+      };
+      console.log("rrrttt")
+      fileReader.readAsBinaryString(files[0]);
+    },
   },
   async created(){
 

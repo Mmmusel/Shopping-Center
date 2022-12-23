@@ -83,7 +83,7 @@ export default {
             return  /^[1-9]{1}\d*$/.test(v) || `库存为整数`;
           }
       ],
-      costRule:[required("单间进价"),
+      costRule:[required("单件进价"),
           function (v) {
             return  /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/.test(v) || `金额最多两位小数`;
           }

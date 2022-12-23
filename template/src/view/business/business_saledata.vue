@@ -27,6 +27,37 @@
       </template>
     </v-row>
 
+    <v-btn
+              class="ma-2"
+              color="blue"
+              @click="printOut"
+          >导出pdf
+    </v-btn>
+    <!-- todo -->
+              <template>
+              <download-excel
+              class="export-excel-wrapper"
+              :data="DetailsForm"
+              :fields="json_fields"
+              :header="Title"
+              name="导出销量.xls"
+            >
+              <!-- 上面可以自定义自己的样式，还可以引用其他组件button -->
+              <el-button type="success">导出excel</el-button>
+              </download-excel>
+              </template>
+    <!--删除删除 TODO
+    -->
+    <div class="container">
+      {{ upload_file || "导入" }}
+      <input
+        type="file"
+        accept=".xls,.xlsx"
+        class="upload_file"
+        @change="readExcel($event)"
+      />
+    </div>
+    <!-- todo -->
     <div>
       <region-selects
 
@@ -62,7 +93,7 @@
         <v-row class="ml-3">
           周业务量
         </v-row>
-        <line-chart
+        <line-chart id="xxx"
             width="98%"
             :chart-data="lineChartData"
             :indicators="lineChartIndicators"
@@ -157,7 +188,6 @@
 </template>
 
 <script>
-
 import {getHomePanels, getWeekAnalysis} from "@/api/goods";
 import LineChart from "@/components/business/LineChart";
 
@@ -166,7 +196,8 @@ var lineChartData = {
   sales: [120, 82, 91, 154, 162, 140, 145],
   expenses: [110, 70, 150, 50, 46, 80, 111],
   profits: [99, 55, 110, 67, 88, 44, 76],
-};
+}; //todo
+
 var DEFAULT_PANELS = [
   {icon: "mdi-dolly", color: "blue", title: "商品", text: "4(件)"},
   {
@@ -222,8 +253,12 @@ function sum(arr) {
         });
       }
 //导入商品简介组件
+
+import htmlToPdf from '@/components/business/echartstopdf';
 import { RegionSelects } from 'v-region'
 import util from "@/components/customer/util";
+
+import { read, utils } from 'xlsx'
 //import business_Product from "@/components/business/business_product";
 export default {
   name: "business_saledata",
@@ -231,6 +266,28 @@ export default {
     LineChart,RegionSelects
   },
   data: () => ({
+    Title:"导出本周数据",
+
+    json_fields: {
+        "采购额":'purchases',
+        "销售额":'sales',
+        "支出":'expenses',
+        "利润":'profit',
+      },
+    DetailsForm: [
+        {
+          purchases:lineChartData.purchases[0],
+          sales:lineChartData.sales[0],
+          expenses:lineChartData.expenses[0],
+          profit:lineChartData.profits[0]
+        },
+        {
+          purchases:lineChartData.purchases[1],
+          sales:lineChartData.sales[1],
+          expenses:lineChartData.expenses[1],
+          profit:lineChartData.profits[1]
+        },
+    ],
     business_name :"商家lll",
     lineChartData,
     indicators: DEFAULT_PANELS,
@@ -283,6 +340,57 @@ ccolors: {
   }),
 
    methods:{
+    // todo
+    readExcel(e) {
+      // 读取表格文件
+      let that = this;
+      const files = e.target.files;
+
+
+      if (files.length <= 0) {
+        return false;
+      } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+        this.$message({
+          message: "上传格式不正确，请上传xls或者xlsx格式",
+          type: "warning"
+        });
+        return false;
+      } else {
+        // 更新获取文件名
+        that.upload_file = files[0].name;
+      }
+
+
+
+      const fileReader = new FileReader();
+      fileReader.onload = ev => {
+        try {
+          const data = ev.target.result;
+
+          const workbook = read(data, {
+            type: "binary"
+          });
+
+          const wsname = workbook.SheetNames[0]; //取第一张表
+          const ws = utils.sheet_to_json(workbook.Sheets[wsname]); //生成json表格内容
+          //ws就是读取的数据（不包含标题行即表头，表头会作为对象的下标）
+
+          //this.submit_form();
+
+					console.log(ws);
+
+        } catch (e) {
+
+          console.log(e);
+          return false;
+        }
+      };
+      console.log("rrrttt")
+      fileReader.readAsBinaryString(files[0]);
+    },
+    printOut () {
+        htmlToPdf.downloadPDF(document.querySelector('#xxx'), '统计报表')
+      },
     leftPage(){
       this.offset-=1
       this.newDimension()
@@ -374,6 +482,52 @@ ccolors: {
        this.indicators[1].text = sum(lineChartData.sales)+"（件）"
        this.indicators[2].text = sum(lineChartData.expenses).toFixed(2)+"（元）"
        this.indicators[3].text = sum(lineChartData.profits).toFixed(2)+"（元）"
+
+       this.DetailsForm= [
+        {
+          purchases:lineChartData.purchases[0],
+          sales:lineChartData.sales[0],
+          expenses:lineChartData.expenses[0],
+          profit:lineChartData.profits[0]
+        },
+        {
+          purchases:lineChartData.purchases[1],
+          sales:lineChartData.sales[1],
+          expenses:lineChartData.expenses[1],
+          profit:lineChartData.profits[1]
+        },
+           {
+          purchases:lineChartData.purchases[2],
+          sales:lineChartData.sales[2],
+          expenses:lineChartData.expenses[2],
+          profit:lineChartData.profits[2]
+        },
+           {
+          purchases:lineChartData.purchases[3],
+          sales:lineChartData.sales[3],
+          expenses:lineChartData.expenses[3],
+          profit:lineChartData.profits[3]
+        },
+           {
+          purchases:lineChartData.purchases[4],
+          sales:lineChartData.sales[4],
+          expenses:lineChartData.expenses[4],
+          profit:lineChartData.profits[4]
+        },
+           {
+          purchases:lineChartData.purchases[5],
+          sales:lineChartData.sales[5],
+          expenses:lineChartData.expenses[5],
+          profit:lineChartData.profits[5]
+        },
+           {
+          purchases:lineChartData.purchases[6],
+          sales:lineChartData.sales[6],
+          expenses:lineChartData.expenses[6],
+          profit:lineChartData.profits[6]
+        },
+
+    ]
 
      },
 
