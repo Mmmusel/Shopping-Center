@@ -44,6 +44,13 @@ export default new Router({
             component: (resolve) => require(['../components/customer/customer_product_view.vue'], resolve)
         },
                 {
+            path: '/shop/:id',
+            meta: {
+                title: '商家详情'
+            },
+            component: (resolve) => require(['../components/customer/product_to_business.vue'], resolve)
+        },
+                {
             path: '/searchOut',
             meta: {
                 title: '搜索结果'

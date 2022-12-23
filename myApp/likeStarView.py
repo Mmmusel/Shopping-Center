@@ -56,3 +56,55 @@ def get_product_likes(request):
         response['msg'] = str(e)
         response['error_num'] = 1
     return JsonResponse(response)
+
+def get_user_star_to_shop(request):
+    response = {}
+    try:
+        o1 = UserInfo.objects.get(id=request.GET.get('user_id'))
+        shop = UserInfo.objects.get(id=request.GET.get('business_id'))
+        a=StarList.objects.filter(star_customer_id=o1,star_business_id=shop)
+        if(a.count()==1):
+            response['star'] = 'star'
+        else:
+            response['star'] = 'not'
+
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
+
+def toggle_user_star_to_shop(request):
+    response = {}
+    try:
+        o1 = UserInfo.objects.get(id=request.GET.get('user_id'))
+        shop = UserInfo.objects.get(id=request.GET.get('business_id'))
+        a = StarList.objects.filter(star_customer_id=o1, star_business_id=shop)
+        if(a.count()==1):
+            a[0].delete()
+        else:
+            newitem=StarList(star_customer_id=o1,star_business_id=shop)
+            newitem.save()
+
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
+
+def get_shop_stars(request):
+    response = {}
+    try:
+        shop = UserInfo.objects.get(id=request.GET.get('business_id'))
+
+        a=StarList.objects.filter(star_business_id=shop)
+        p=a.count()
+        response['stars']=p
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)

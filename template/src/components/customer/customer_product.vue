@@ -4,8 +4,6 @@
                  class="product-main">
       <!-- 依次显示商品图片、名称、销量、颜色、单价，加入购物车 -->
 
-
-
       <img :src="`http://127.0.0.1:8000/media/${info.fields.product_image}`" alt="" height="200px">
       <h4>{{info.fields.product_name}}</h4>
       <h4>销量{{info.fields.product_sales}}</h4>

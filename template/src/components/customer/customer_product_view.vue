@@ -25,8 +25,27 @@
         <span class="word">{{product_goods}}</span>
     </div>
 
+      </div>
+    <div class="product-desc">
+      <h2>商家详情</h2>
+      <router-link :to="'/shop/' + product.fields.product_business">
+        点击进入商家主页
 
+      </router-link>
+       <div>
+        <span class="fillstar" v-if="bestar" @click="changeStar">
+            <font-awesome-icon :icon="['fas', 'star']" class="icon righticon" ></font-awesome-icon>
+        </span>
+        <span class="star" v-if="!bestar" @click="changeStar">
+            <font-awesome-icon :icon="['fas', 'star']" class="icon righticon" ></font-awesome-icon>
+
+        </span>
+
+        <span class="word">{{shop_stars}}</span>
     </div>
+    </div>
+
+
     <div class="product-desc">
       <h2>产品介绍</h2>
       <img :src="`http://127.0.0.1:8000/media/${product.fields.product_imageDetail}`" alt="">
@@ -46,6 +65,8 @@ export default {
       product: null,
       product_goods:0,
       begood:true,
+      bestar:true,
+      shop_stars:0,
     }
   },
   methods: {
@@ -55,6 +76,17 @@ export default {
         .then((response) => {
             console.log(response);
            this.product_goods=response.data.goods
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+      await this.axios.get('get_shop_stars/',
+            {params:{ business_id: this.product.fields.product_business}})
+        .then((response) => {
+            console.log(response);
+           this.shop_stars=response.data.stars
 
         })
         .catch(function (error) {
@@ -79,6 +111,24 @@ export default {
             console.log(error);
         });
     },
+    async changeStar(){
+      if(this.bestar){
+        this.shop_stars-=1
+      }else{
+        this.shop_stars+=1
+      }
+      this.bestar=!this.bestar
+
+      await this.axios.get('toggle_user_star_to_shop/',
+            {params:{user_id: this.$store.state.userId, business_id: this.product.fields.product_business}})
+        .then((response) => {
+            console.log(response);
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    },
     async initUserToProduct(){
       await this.axios.get('get_user_like_to_product/',
             {params:{user_id: this.$store.state.userId, product_id: this.id}})
@@ -89,6 +139,22 @@ export default {
             this.begood=true
           }else{
             this.begood=false
+          }
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+      await this.axios.get('get_user_star_to_shop/',
+            {params:{user_id: this.$store.state.userId, business_id: this.product.fields.product_business}})
+        .then((response) => {
+            console.log(response);
+            //this.list = response.data.list
+          if(response.data.star==='star'){
+            this.bestar=true
+          }else{
+            this.bestar=false
           }
 
         })
@@ -157,6 +223,17 @@ color: red;
         font-size: 32px;
 }
 .heart{
+color: gray;
+
+        font-size: 32px;
+}
+
+.fillstar{
+color: yellow;
+
+        font-size: 32px;
+}
+.star{
 color: gray;
 
         font-size: 32px;

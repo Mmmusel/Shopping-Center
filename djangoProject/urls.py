@@ -64,7 +64,11 @@ urlpatterns = [
 
     path('get_user_like_to_product/',StarView.get_user_like_to_product),
     path('toggle_user_like_to_product/',StarView.toggle_user_like_to_product),
-    path('get_product_likes',StarView.get_product_likes),
+    path('get_product_likes/',StarView.get_product_likes),
+
+    path('get_shop_stars/',StarView.get_shop_stars),
+    path('toggle_user_star_to_shop/',StarView.toggle_user_star_to_shop),
+    path('get_user_star_to_shop/',StarView.get_user_star_to_shop),
 
     re_path(r'^media/avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'avatar/')}),
     re_path(r'^media/user_avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'user_avatar/')}),

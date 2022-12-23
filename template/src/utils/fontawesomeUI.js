@@ -4,13 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faUser,
   faRunning,
-    faHeart
+    faHeart,
+    faStar,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
   faUser,
   faRunning,
     faHeart,
+    faStar,
 );
 
 export default FontAwesomeIcon
