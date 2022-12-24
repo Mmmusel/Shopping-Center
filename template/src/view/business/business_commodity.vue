@@ -218,7 +218,41 @@ export default {
         });
     },
 
-    addCommodity() {
+    async addCommodity() {
+
+              let m=[]
+              await this.axios.get('fetch_userInfo',{params:{user_id: this.$store.state.userId}})
+              .then((response) => {
+                  console.log(response);
+                  m=response
+
+
+              })
+              .catch(function (error) {
+                  console.log(error);
+
+              });
+
+
+              if(m.data.user_mobile===""){
+                console.log("null")
+                window.alert("请完善联系方式")
+                this.$router.push({path: '/business/business_information'})
+                return
+              }
+
+              if((m.data.user_province==="")||(m.data.user_city==="")||(m.data.user_area==="")){
+                window.alert("请完善地址")
+                this.$router.push({path: '/business/business_information'})
+                return
+              }
+
+
+              if(m.data.user_address===""){
+                window.alert("请完善详细地址")
+                this.$router.push({path: '/business/business_information'})
+                return
+              }
       this.$router.push({path: '/business/commodity/add_commodity'})
     },
     addExcelStock(){

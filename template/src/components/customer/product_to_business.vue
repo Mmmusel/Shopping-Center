@@ -306,7 +306,7 @@ console.log(this.shop_stars);
 }
 
 .fillstar{
-color: yellow;
+color: #ffd500;
 
         font-size: 32px;
 }

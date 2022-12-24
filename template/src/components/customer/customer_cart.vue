@@ -102,9 +102,44 @@
         },
         methods: {
             //通知Vuex,完成下单
-            async handleOrder(){
 
-              console.log("thisthis");
+            async handleOrder(){
+              let m=[]
+              await this.axios.get('fetch_userInfo',{params:{user_id: this.$store.state.userId}})
+              .then((response) => {
+                  console.log(response);
+                  m=response
+
+
+              })
+              .catch(function (error) {
+                  console.log(error);
+
+              });
+              console.log(m)
+
+              if(m.data.user_mobile===""){
+                console.log("null")
+                window.alert("请完善联系方式")
+                this.$router.push({path: '/customerPerson'})
+                return
+              }
+
+              if((m.data.user_province==="")||(m.data.user_city==="")||(m.data.user_area==="")){
+                window.alert("请完善地址")
+                this.$router.push({path: '/customerPerson'})
+                return
+              }
+
+
+              if(m.data.user_address===""){
+                window.alert("请完善详细地址")
+                this.$router.push({path: '/customerPerson'})
+                return
+              }
+
+              console.log('full')
+
               await this.axios.get('add_order/',
                   {params:{user_id: this.$store.state.userId}})
               .then((response) => {
@@ -119,9 +154,19 @@
               console.log("this end");
 
               var i = this.userCartList.length
-              for (; i>0; i--) {
-                await this.handleDelete(0)
+              for (; i>1; i--) {
+                await this.axios.get('delete_item_in_cart/',
+                  {params:{user_id: this.$store.state.userId, product_id: this.userCartList[i].fields.product_id}})
+              .then((response) => {
+                  console.log(response);
+                  //this.list = response.data.list
+                  //window.alert("删除成功")
+              })
+              .catch(function (error) {
+                  console.log(error);
+              });
               }
+              await this.handleDelete(0)
 
 
 
