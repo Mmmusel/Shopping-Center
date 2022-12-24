@@ -1,15 +1,33 @@
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
-
+from django.db import connection
 from myApp.models import Book, UserInfo, Product, CartItems
 import json
 
+def ttt(reqeust):
+    response = {}
+    try:
+        from django.db import connection
+        with connection.cursor() as cur:
+            #cur.execute('update myapp_userinfo set user_address="XXX出版社" where id=1')
+            t=0
+            cur.callproc('testProc3',[0])
+            resu=cur.fetchall()
+            print(resu[0][0])
 
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
 def show_cart(request):
     response = {}
     try:
         o1 = UserInfo.objects.get(id=request.GET.get('user_id'))
         products = CartItems.objects.filter(user_id=o1)
+
+
 
         response['list'] = json.loads(serializers.serialize("json", products))
         response['msg'] = 'success'

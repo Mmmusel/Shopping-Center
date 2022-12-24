@@ -32,6 +32,19 @@ class UserLog(models.Model):
     log_city = models.CharField(max_length=16, null=True)
     log_area = models.CharField(max_length=16, null=True)
 
+class UserActionLog(models.Model):
+    action_id = models.ForeignKey("UserInfo", on_delete=models.CASCADE)
+    action_time = models.DateTimeField(auto_now_add=True)
+    action_name=models.CharField(max_length=16)
+    action_type=models.CharField(max_length=10)
+
+
+    action_province = models.CharField(max_length=16, null=True)
+    action_city = models.CharField(max_length=16, null=True)
+    action_area = models.CharField(max_length=16, null=True)
+
+    action=models.CharField(max_length=16)
+
 
 class StockInfo(models.Model):
     business_id = models.ForeignKey("UserInfo",  on_delete=models.CASCADE)

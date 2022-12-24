@@ -2,7 +2,7 @@ from django.core import serializers
 from django.http import JsonResponse, HttpResponse
 
 
-from myApp.models import UserInfo, Product, LikeList,StarList,CheckProduct,UserLog
+from myApp.models import UserInfo, Product, LikeList,StarList,CheckProduct,UserLog,UserActionLog
 import json
 
 def get_users(request):
@@ -143,4 +143,34 @@ def get_user_log(request):
         response['msg'] = str(e)
         response['error_num'] = 1
 
+    return JsonResponse(response)
+
+def get_user_action_log(request):
+    response = {}
+    try:
+        o=UserActionLog.objects.filter()
+        response['list']=json.loads(serializers.serialize("json", o))
+        response['msg'] = 'succes111s'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+
+    return JsonResponse(response)
+
+def get_user_action_num(request):
+    response = {}
+    try:
+        from django.db import connection
+        with connection.cursor() as cur:
+            cur.callproc('testProc3', [0])
+            resu = cur.fetchall()
+            print(resu[0][0])
+
+        response['num'] = resu[0][0]
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
     return JsonResponse(response)

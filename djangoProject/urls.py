@@ -85,6 +85,9 @@ urlpatterns = [
 
     path('get_user_log/',CheckView.get_user_log),
     path('add_log/',CheckView.add_log),
+    path('ttt/',CartView.ttt),
+    path('get_user_action_log/',CheckView.get_user_action_log),
+    path('get_user_action_num/',CheckView.get_user_action_num),
 
     re_path(r'^media/avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'avatar/')}),
     re_path(r'^media/user_avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'user_avatar/')}),

@@ -1,13 +1,17 @@
 <template>
+
   <div class="home">
     <div class="header">头部</div>
+
     <template v-if="show">
       <div class="header">
         <router-link to="/customerHome"
                      class="header-title">电商网站首页</router-link>
-        <div class="header-menu">
-          {{user}}
-        </div>
+    <br><br>
+    <v-avatar class="name" color="orange" size="62">
+      <span class="white--text headline">{{user}}</span>
+    </v-avatar>
+
         <!--
         {% csrf_token %}
         <el-form ref="form" :model="form" label-width="80px">
@@ -31,14 +35,14 @@
         <!--搜索框-->
     <div class="container" id="div1" align="center">
       <v-row align="center">
-      <div class="search bar1">
+      <div class="search_bar1">
         <form>
           <input type="text" v-model="inputText" placeholder="请输入您要搜索的内容...">
 
         </form>
         </div>
         <div class="search bar1">
-      <button @click="Click"> <img src="../../assets/search.png" width="20px" height="20px"> </button>
+      <button @click="Click"> <img src="../../assets/search.png" width="25px" height="25px"> </button>
         </div>
     </v-row>
     </div>
@@ -150,26 +154,38 @@ export default {
 body{
   margin:0;
 }
-.container {
-  position: center;
- }
 
-.bar1 {background: #A3D0C3; }
-.bar1 input {
-  border: 2px solid #7BA7AB;
-  border-radius: 5px;
-  background: #F9F0DA;
-  color: #9E9C9C;
+.container {
+  width: 5000px;
+  margin: 50px auto;
+  overflow: hidden;
+  border: 1px solid #fdfdfe;
+  position: center;
+
 }
-.bar1 button {
-  top: 0;
-  right: 0;
-  background: #7BA7AB;
-  border-radius: 0 5px 5px 0;
+.search_bar1 {
+  background-color: rgb(63, 150, 245);
+  height: 50px;
+  width:800px;
+  overflow: hidden;
+  border-radius: 3px;
+  margin-left: 200px;
+  box-sizing: border-box;
+  padding: 5px;}
+input {
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 3px;
+  margin: 0;
+  padding: 0px 40px 0px 10px;
+  outline: 0;
+  font-size: 14px;
+  color: #949494;
+  background-color: #fff;
 }
-.bar1 button:before {
-  font-family: FontAwesome,serif;
-  font-size: 16px;
-  color: #F9F0DA;
+input::-webkit-input-placeholder {
+  color: #8c8c8c;
 }
 </style>

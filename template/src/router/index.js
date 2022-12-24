@@ -109,6 +109,10 @@ export default new Router({
                     path : 'log',
                     component: () => import('@/view/manager/user_log')
                 },
+                {
+                    path : 'actionlog',
+                    component: () => import('@/view/manager/user_action')
+                },
 
             ]},
 

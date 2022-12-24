@@ -156,7 +156,7 @@
               var i = this.userCartList.length
               for (; i>1; i--) {
                 await this.axios.get('delete_item_in_cart/',
-                  {params:{user_id: this.$store.state.userId, product_id: this.userCartList[i].fields.product_id}})
+                  {params:{user_id: this.$store.state.userId, product_id: this.userCartList[i-1].fields.product_id}})
               .then((response) => {
                   console.log(response);
                   //this.list = response.data.list
