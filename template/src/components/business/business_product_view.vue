@@ -8,22 +8,12 @@
       <div class="product-info">
         <h1 class="product-name">{{product.fields.product_name}}</h1>
         <div class="product-cost">{{product.fields.product_cost}}</div>
-        <div class="product-add-cart" @click="handleAddCart">编辑商品</div>
+        <div class="product-add-cart" v-if="isOn" @click="handleAddCart">编辑商品</div>
+        <div class="product-add-cart" v-if="isOn" @click="removePro">下架商品</div>
+        <div class="product-add-cart" v-if="!isOn" @click="handleAddCart">编辑并上架商品</div>
       </div>
 
 
-
-      <div>
-        <span class="fillheart" v-if="begood" @click="changeGood">
-            <font-awesome-icon :icon="['fas', 'heart']" class="icon righticon" ></font-awesome-icon>
-        </span>
-        <span class="heart" v-if="!begood" @click="changeGood">
-            <font-awesome-icon :icon="['fas', 'heart']" class="icon righticon" ></font-awesome-icon>
-
-        </span>
-
-        <span class="word">{{product_goods}}</span>
-    </div>
 
       </div>
 
@@ -50,9 +40,22 @@ export default {
       begood:true,
       bestar:true,
       shop_stars:0,
+      isOn:true,
     }
   },
   methods: {
+    async removePro(){
+      await this.axios.get('delete_product/',
+            {params:{ product_id: this.id}})
+        .then((response) => {
+            console.log(response);
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    },
+
     async getProductLikes(){
       await this.axios.get('get_product_likes/',
             {params:{ product_id: this.id}})
@@ -168,7 +171,11 @@ export default {
 
     await this.getProduct(this.id)
 
-
+    if(this.product.fields.product_status=='上架'){
+      this.isOn=true
+    }else {
+      this.isOn=false
+    }
 
   },
 

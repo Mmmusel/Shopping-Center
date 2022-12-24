@@ -221,7 +221,9 @@ export default {
 
 
 
-          window.alert("商品修改成功")
+          window.alert("商品修改申请已成功提交，请耐心等待审核通过")
+          this.$router.push({path: '/business/commodity'})
+
 
           }
         console.log(response)

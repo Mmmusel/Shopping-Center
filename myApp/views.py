@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 
 
-from myApp.models import Book, UserInfo,Product,CartItems,StockInfo
+from myApp.models import Book, UserInfo,Product,CartItems,StockInfo,CheckProduct
 import json
 
 
@@ -77,9 +77,6 @@ def add_product(request):
     product_business_obj = UserInfo.objects.get(id=iid)
     product_Info = json.loads(request.FILES.get('forms').read())
 
-    print("777")
-
-
     response = {}
     if request.method == 'POST':
         #goods_image = request.FILES.get('goods_image')
@@ -100,10 +97,27 @@ def add_product(request):
                           product_image=request.FILES.get('product_image1'),
                           product_imageDetail=request.FILES.get('product_image2'),
         product_business=product_business_obj,
-                          product_status='审核中'
+                          product_status='申请上架'
 
                           )
         product.save()
+
+        productcheck = CheckProduct(
+            product_id=product,
+                          product_name=product_Info['product_name'],
+                          product_brand=product_Info['product_brand'],
+
+
+                          product_cost=t,
+                          product_color=product_Info['product_color'],
+                          product_image=request.FILES.get('product_image1'),
+                          product_imageDetail=request.FILES.get('product_image2'),
+                          product_business=product_business_obj,
+                          product_status='申请上架',
+            check_status='待审核'
+
+                          )
+        productcheck.save()
     try:
 
         response['msg'] = 'success'
@@ -151,7 +165,7 @@ def edit_product(request):
         else:
             t=1.0*int(product_Info['product_cost'])
 
-
+        """
         p.product_name=product_Info['product_name']
         p.product_brand=product_Info['product_brand']
 
@@ -166,6 +180,33 @@ def edit_product(request):
             p.product_imageDetail=request.FILES.get('product_image2')
 
         p.save()
+        """
+
+        if request.FILES.get('product_image1'):
+            product_image1 = request.FILES.get('product_image1')
+        else:
+            product_image1=p.product_image
+        if request.FILES.get('product_image2'):
+            product_imageDetail1 = request.FILES.get('product_image2')
+        else:
+            product_imageDetail1 = p.product_imageDetail
+
+
+        productcheck = CheckProduct(
+            product_id=p,
+            product_name=product_Info['product_name'],
+            product_brand=product_Info['product_brand'],
+
+            product_cost=t,
+            product_color=product_Info['product_color'],
+            product_image=product_image1,
+            product_imageDetail=product_imageDetail1,
+            product_business=p.product_business,
+            product_status='申请修改',
+            check_status='待审核'
+
+        )
+        productcheck.save()
     try:
 
         response['msg'] = 'success'

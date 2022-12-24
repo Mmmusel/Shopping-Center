@@ -104,7 +104,13 @@ export default new Router({
                 {
                     path : 'check',
                     component: () => import('@/view/manager/manager_check')
-                },]},
+                },
+                {
+                    path : 'log',
+                    component: () => import('@/view/manager/user_log')
+                },
+
+            ]},
 
         {
             path: '/business',

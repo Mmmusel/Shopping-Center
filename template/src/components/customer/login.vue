@@ -85,10 +85,11 @@
                     await window.localStorage.setItem('userId', this.userId);
                     this.$store.commit('editUserId', this.userId);
                     window.alert('注册成功，确定进入网站首页');
+                    await this.add_log()
                     if(this.radioVal==='用户'){
                     window.location.href = '/#/customerHome';
                   }else {
-                  window.location.href = '/#/manager';}
+                  window.location.href = '/#/business';}
                   } else {
                     window.alert('用户名重复，请再次尝试');
                     this.username = '';
@@ -116,6 +117,7 @@
                   this.$store.commit('editUserId', this.userId);
                   console.log(this.userId);
                   //console.log(error);
+                await this.add_log()
                   window.alert('登陆成功，进入网站首页');
 
                   if(this.radioVal==='用户'){
@@ -165,6 +167,21 @@
           }
           ,
 
+          async add_log(){
+            await this.axios.get('add_log/',{params:{user_id:this.$store.state.userId }})
+              .catch(function (error) {
+                  console.log(error);
+
+              })
+              .then((response) => {
+
+                console.log(response);
+
+              })
+              ;
+          }
+          ,
+
           async searchUserInfo (x1,x2) {
             await this.axios.get('search_userInfo/',{params:{user_name: x1,user_password: x2}})
               .catch(function (error) {
@@ -208,6 +225,7 @@
                 this.login = false;
                 this.register = false;
                 await this.getType()
+              await this.add_log()
                 window.alert('您已经是登录状态')
                 if(this.radioVal==='用户'){
                     window.location.href = '/#/customerHome';

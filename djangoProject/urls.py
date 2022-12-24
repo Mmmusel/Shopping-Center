@@ -23,6 +23,7 @@ from myApp import views as BookView
 from myApp import cartViews as CartView
 from myApp import orderViews as OrderView
 from myApp import likeStarView as StarView
+from myApp import CheckView as CheckView
 
 from django.urls import re_path
 from django.conf import settings
@@ -49,6 +50,7 @@ urlpatterns = [
 
 
     path('edit_product/',BookView.edit_product),
+    path('delete_product',BookView.delete_product),
 
 
     path('show_cart/',CartView.show_cart),
@@ -73,6 +75,16 @@ urlpatterns = [
     path('get_shop_stars/',StarView.get_shop_stars),
     path('toggle_user_star_to_shop/',StarView.toggle_user_star_to_shop),
     path('get_user_star_to_shop/',StarView.get_user_star_to_shop),
+
+    path('get_users/',CheckView.get_users),
+    path('get_check/',CheckView.get_check),
+    path('alterCheckStatus/',CheckView.alterCheckStatus),
+
+    path('get_has_check/',CheckView.get_has_check),
+    path('alterEditCheckStatus/',CheckView.alterEditCheckStatus),
+
+    path('get_user_log/',CheckView.get_user_log),
+    path('add_log/',CheckView.add_log),
 
     re_path(r'^media/avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'avatar/')}),
     re_path(r'^media/user_avatar/(?P<path>.*)$', serve, {'document_root': os.path.join(settings.MEDIA_ROOT,'user_avatar/')}),

@@ -21,6 +21,18 @@ class UserInfo(models.Model):
     user_area = models.CharField(max_length=16, null=True)
 
 
+class UserLog(models.Model):
+    log_id = models.ForeignKey("UserInfo", on_delete=models.CASCADE)
+    log_time = models.DateTimeField(auto_now_add=True)
+    log_name=models.CharField(max_length=16)
+    log_type=models.CharField(max_length=10,null=True)
+
+
+    log_province = models.CharField(max_length=16, null=True)
+    log_city = models.CharField(max_length=16, null=True)
+    log_area = models.CharField(max_length=16, null=True)
+
+
 class StockInfo(models.Model):
     business_id = models.ForeignKey("UserInfo",  on_delete=models.CASCADE)
     product_id = models.ForeignKey("Product", on_delete=models.CASCADE)
@@ -100,6 +112,24 @@ class Product(models.Model):
     product_stock=models.IntegerField(null=True)
 
     product_status=models.CharField(max_length=10)
+
+class CheckProduct(models.Model):
+    product_id = models.ForeignKey("Product", on_delete=models.CASCADE)
+    product_name = models.CharField(max_length=100)
+    product_brand = models.CharField(max_length=100)
+    product_cost = models.DecimalField(max_digits=9, decimal_places=2)
+    #product_sales = models.IntegerField()
+    product_color = models.CharField(max_length=20)
+    product_image = models.ImageField(upload_to="avatar/")
+    product_imageDetail = models.ImageField(upload_to="avatar/")
+
+    product_business = models.ForeignKey("UserInfo", on_delete=models.CASCADE, null=True)
+    #product_stock = models.IntegerField(null=True)
+    checktime=models.DateTimeField(auto_now_add=True)
+
+    product_status = models.CharField(max_length=10)
+
+    check_status = models.CharField(max_length=10)
 
     """
     def photo_url(self):
