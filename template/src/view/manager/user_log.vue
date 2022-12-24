@@ -1,6 +1,17 @@
 <template>
-
-<div>
+  <div>
+    <v-container fluid>
+      <v-toolbar
+          dark
+          color="blue darken-3"
+          class="mb-1"
+      >
+        <v-spacer></v-spacer>
+        <v-toolbar-title>
+          <h4>订单信息</h4>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
 <v-list-item
             v-for="item in business_lists"
             :key="item.title"
@@ -35,8 +46,10 @@
           </v-list-item-content>
 
         </v-list-item>
-</div>
+    </v-container>
+  </div>
 </template>
+
 
 <script>
 import {RegionText} from "v-region";

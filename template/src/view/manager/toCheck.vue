@@ -6,13 +6,32 @@
         :key="item.pk"
         >
 <v-list-item-content>
-        <!--蓝底头像+用户名-->
   <v-row>
+    <v-col class="product">
+      <!--第一部分上面是商品图像+商品细节照片 下面是商品信息-->
+      <img class="picture1" :src="`http://127.0.0.1:8000/media/${item.fields.product_image}`" alt=""
+           height="50px" width="50px">
+      <img class="picture2" :src="`http://127.0.0.1:8000/media/${item.fields.product_imageDetail}`" alt=""
+           height="50px" width="50px">
+      <v-row>
         <v-col>
-          <img :src="`http://127.0.0.1:8000/media/${business_list_dict[item.fields.product_business].fields.user_avatar}`" alt=""
-                    height="50px" width="50px">
+          <v-list-item-title>{{ item.fields.product_name }}</v-list-item-title>
         </v-col>
-        <!--用户名-->
+        <v-col>
+          <v-list-item-title>{{ item.fields.product_brand  }}</v-list-item-title>
+        </v-col>
+        <v-col>
+          <v-list-item-title>{{ item.fields.product_cost  }}</v-list-item-title>
+        </v-col>
+        <v-col>
+          <v-list-item-title>{{ item.fields.product_color }}</v-list-item-title>
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-col class="saler">
+      <img :src="`http://127.0.0.1:8000/media/${business_list_dict[item.fields.product_business].fields.user_avatar}`" alt=""
+           height="50px" width="50px">
+      <v-row>
         <v-col>
           <v-list-item-title>{{ business_list_dict[item.fields.product_business].fields.user_name }}</v-list-item-title>
         </v-col>
@@ -21,9 +40,9 @@
         <v-col>
           <!--<v-list-item-title>{{ item.address }}</v-list-item-title>-->
           <region-text
-                  separator="-"
-                  :town="false"
-                  v-model="business_list_dict[item.fields.product_business].fields.region"
+              separator="-"
+              :town="false"
+              v-model="business_list_dict[item.fields.product_business].fields.region"
           />
         </v-col>
         <v-col>
@@ -34,37 +53,12 @@
           <v-list-item-title>{{ business_list_dict[item.fields.product_business].fields.user_mobile  }}</v-list-item-title>
 
         </v-col>
-</v-row>
-  <v-row>
-        <v-col>
-          <img :src="`http://127.0.0.1:8000/media/${item.fields.product_image}`" alt=""
-                    height="50px" width="50px">
-        </v-col>
-        <v-col>
-          <img :src="`http://127.0.0.1:8000/media/${item.fields.product_imageDetail}`" alt=""
-                    height="50px" width="50px">
-        </v-col>
-        <!--用户名-->
-        <v-col>
-          <v-list-item-title>{{ item.fields.product_name }}</v-list-item-title>
-        </v-col>
-
-        <v-col>
-          <v-list-item-title>{{ item.fields.product_brand  }}</v-list-item-title>
-
-        </v-col>
-        <v-col>
-          <v-list-item-title>{{ item.fields.product_cost  }}</v-list-item-title>
-        </v-col>
-    <v-col>
-          <v-list-item-title>{{ item.fields.product_color }}</v-list-item-title>
-        </v-col>
-    <v-col>
-          <v-list-item-title>{{ item.fields.checktime | format  }}</v-list-item-title>
-        </v-col>
-</v-row>
-</v-list-item-content>
-          <v-list-item-action>
+      </v-row>
+    </v-col>
+    <v-col class="status">
+        <br>
+        <v-list-item-title>{{ item.fields.checktime | format  }}</v-list-item-title>
+        <v-list-item-action>
             <v-row>
               <v-col>
           <v-btn
@@ -84,9 +78,14 @@
                 </v-col>
               </v-row>
                       </v-list-item-action>
+    </v-col>
+  </v-row>
+</v-list-item-content>
+
         </v-list-item>
 </div>
 </template>
+
 
 <script>
 
@@ -192,3 +191,39 @@ await this.initBusinessInfo();
   },
 }
 </script>
+
+<style scoped>
+.picture1{
+  margin-right: 10px;
+}
+.picture2{
+  margin-left: 10px;
+}
+.saler{
+  margin-left: 20px;
+  margin-right: 10px;
+  border-style:dashed;
+  border-width:3px;
+  border-color: rgba(63, 150, 245, 0.50);
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.product{
+  border-style:dashed;
+  border-width:3px;
+  border-color: rgba(63, 150, 245, 0.50);
+  margin-right: 10px;
+  margin-left: 20px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.status{
+  border-style:dashed;
+  border-width:3px;
+  border-color: rgba(63, 150, 245, 0.50);
+  margin-right: 15px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+</style>
