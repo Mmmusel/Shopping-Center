@@ -185,14 +185,7 @@ export default {
     filteredKeys () {
       return this.keys.filter(key => key !== `Name`)
     },
-    myFilteredKeys () {
-      if(this.productsList.length!=0){
 
-        //console.log(Object.keys(this.productsList[1].fields))
-        return Object.keys(this.productsList[1].fields).filter(key => key !== `product_name`)
-      }
-      return []
-    },
   },
   methods: {
     nextPage () {
@@ -340,7 +333,7 @@ export default {
     await this.getProductsList()
     console.log("this")
     console.log(JSON.stringify(this.productsList))
-    console.log(this.myFilteredKeys)
+
 
   }
 }

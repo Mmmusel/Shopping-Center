@@ -165,7 +165,7 @@ export default {
     async getProductsList(){
       //从Vuex获取商品列表信息
       //return this.$store.state.productList;
-      await this.axios.get('show_products/')
+      await this.axios.get('show_customer_products/')
         .then((response) => {
             console.log(response.data.list);
             this.list = response.data.list

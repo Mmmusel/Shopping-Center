@@ -87,9 +87,8 @@
                     window.alert('注册成功，确定进入网站首页');
                     if(this.radioVal==='用户'){
                     window.location.href = '/#/customerHome';
-                  }else{
-                    window.location.href = '/#/business';
-                  }
+                  }else {
+                  window.location.href = '/#/manager';}
                   } else {
                     window.alert('用户名重复，请再次尝试');
                     this.username = '';
@@ -121,9 +120,10 @@
 
                   if(this.radioVal==='用户'){
                     window.location.href = '/#/customerHome';
-                  }else{
+                  }else if(this.radioVal==='商家'){
                     window.location.href = '/#/business';
-                  }
+                  }else {
+                  window.location.href = '/#/manager';}
 
               }else{
                   window.alert('账号或密码错误');
@@ -211,9 +211,11 @@
                 window.alert('您已经是登录状态')
                 if(this.radioVal==='用户'){
                     window.location.href = '/#/customerHome';
-                  }else{
+                  }else if(this.radioVal==='商家'){
                     window.location.href = '/#/business';
-                  }
+                  }else {
+                  window.location.href = '/#/manager';
+                }
             }
         }
     }

@@ -93,6 +93,18 @@ export default new Router({
         }
             ]
         },
+        {
+            path: '/manager',
+            component: () => import('@/view/manager/manager'),
+            children: [
+                {
+                    path : '',
+                    component: () => import('@/view/manager/manager_check')
+                },
+                {
+                    path : 'check',
+                    component: () => import('@/view/manager/manager_check')
+                },]},
 
         {
             path: '/business',
@@ -115,9 +127,24 @@ export default new Router({
                     component: () => import('@/view/business/business_add_commodity'),
                 },
                 {
+            path: 'product/:id',
+            meta: {
+                title: '商家商品详情'
+            },
+            component: (resolve) => require(['../components/business/business_product_view.vue'], resolve)
+        },
+                {
+            path: 'business_edit_commodity/:id',
+            meta: {
+                title: '编辑商品'
+            },
+            component: () => import('@/view/business/business_edit_commodity')
+        },
+
+                {
             path: 'commodity/edit_commodity_stock/:id',
             meta: {
-                title: '增加库存'
+                title: '编辑库存'
             },
             component: (resolve) => require(['../components/business/edit_commodity_stock.vue'], resolve)
         },

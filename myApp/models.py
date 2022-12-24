@@ -99,6 +99,8 @@ class Product(models.Model):
     product_business=models.ForeignKey("UserInfo",on_delete=models.CASCADE,null=True)
     product_stock=models.IntegerField(null=True)
 
+    product_status=models.CharField(max_length=10)
+
     """
     def photo_url(self):
         if self.photo and hasattr(self.photo, 'url'):

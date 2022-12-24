@@ -1,6 +1,6 @@
 <template>
   <div class="product">
-    <router-link :to="'/product/' + info.pk"
+    <router-link :to="'/business/product/' + info.pk"
                  class="product-main">
       <!-- 依次显示商品图片、名称、销量、颜色、单价，加入购物车 -->
 

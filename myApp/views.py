@@ -45,11 +45,23 @@ def show_products(request):
         response['error_num'] = 1
     return JsonResponse(response)
 
+def show_customer_products(request):
+    response = {}
+    try:
+        products = Product.objects.filter(product_status='上架')
+        response['list'] = json.loads(serializers.serialize("json", products))
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
+
 def show_searched_products(request):
     response = {}
     try:
 
-        products = Product.objects.filter(product_name__contains=request.GET.get('search_text'))
+        products = Product.objects.filter(product_status='上架').filter(product_name__contains=request.GET.get('search_text'))
         response['list'] = json.loads(serializers.serialize("json", products))
         response['msg'] = 'success'
         response['error_num'] = 0
@@ -87,10 +99,73 @@ def add_product(request):
                           product_color=product_Info['product_color'],
                           product_image=request.FILES.get('product_image1'),
                           product_imageDetail=request.FILES.get('product_image2'),
-        product_business=product_business_obj
+        product_business=product_business_obj,
+                          product_status='审核中'
 
                           )
         product.save()
+    try:
+
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+
+    return JsonResponse(response)
+
+def delete_product(request):
+    response = {}
+    try:
+        product = Product.objects.filter(id=request.GET.get('product_id'))
+        product.product_status='下架'
+
+        cart=CartItems.objects.filter(product_id=product)
+        for i in cart:
+            i.delete()
+        response['msg'] = 'success'
+        response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+    return JsonResponse(response)
+
+def edit_product(request):
+
+    #iid = int(str(request.FILES.get('user_id').read())[2:-1])
+    pid = int(str(request.FILES.get('product_id').read())[2:-1])
+
+    #product_business_obj = UserInfo.objects.get(id=iid)
+    product_Info = json.loads(request.FILES.get('forms').read())
+
+    p = Product.objects.get(id=pid)
+
+
+    response = {}
+    if request.method == 'POST':
+
+        t=0.0
+
+        if product_Info['product_cost'].find('.'):
+            t=float(product_Info['product_cost'])
+        else:
+            t=1.0*int(product_Info['product_cost'])
+
+
+        p.product_name=product_Info['product_name']
+        p.product_brand=product_Info['product_brand']
+
+
+        p.product_cost=t
+        p.product_color=product_Info['product_color']
+        #product_image=request.FILES.get('product_image1')
+        #product_imageDetail=request.FILES.get('product_image2')
+        if request.FILES.get('product_image1'):
+            p.product_image=request.FILES.get('product_image1')
+        if request.FILES.get('product_image2'):
+            p.product_imageDetail=request.FILES.get('product_image2')
+
+        p.save()
     try:
 
         response['msg'] = 'success'
@@ -296,8 +371,7 @@ def edit_userInfo(request):
         userInfo.user_name=save_userInfo['user_name']
         userInfo.user_address=save_userInfo['user_address']
         userInfo.user_mobile=save_userInfo['user_mobile']
-        print("llll")
-        print(request.FILES.get('user_image'))
+
         if request.FILES.get('user_image'):
             userInfo.user_avatar=request.FILES.get('user_image')
 

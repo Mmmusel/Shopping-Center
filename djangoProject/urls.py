@@ -41,10 +41,14 @@ urlpatterns = [
 
     path('add_product/', BookView.add_product),
     path('show_products/',BookView.show_products),
+    path('show_customer_products/',BookView.show_customer_products),
     path('fetch_product/',BookView.fetch_product),
     path('add_product_stock/',BookView.add_product_stock),
     path('fetch_stock/',BookView.fetch_stock),
     path('show_searched_products/',BookView.show_searched_products),
+
+
+    path('edit_product/',BookView.edit_product),
 
 
     path('show_cart/',CartView.show_cart),
