@@ -14,6 +14,7 @@
         <div class="product-cost">商品品牌：{{product.fields.product_brand}}</div>
         <div class="product-cost">商品颜色：{{product.fields.product_color}}</div>
         <div class="product-cost">商品状态：{{product.fields.product_status}}</div>
+
         <div class="product-add-cart" v-if="isOn" @click="handleAddCart">编辑商品</div>
         <div class="product-add-cart" v-if="isOn" @click="removePro">下架商品</div>
         <div class="product-add-cart" v-if="!isOn" @click="handleAddCart">编辑并上架商品</div>

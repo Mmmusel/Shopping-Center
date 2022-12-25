@@ -58,6 +58,7 @@
           </div>
         </template>
       </v-navigation-drawer>
+      <div style="height: 3rem;"></div>
       <router-view></router-view>
     </div>
   </div>

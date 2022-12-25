@@ -455,3 +455,23 @@ def userId2userName(request):
         response['error_num'] = 1
 
     return JsonResponse(response)
+
+def edit_password(request):
+    response = {}
+    try:
+        userInfo = UserInfo.objects.filter(id=request.GET.get('user_id'),user_password=request.GET.get('old_password'))
+        if(userInfo.count()==0):
+            response['msg'] = 'succes111s'
+            response['error_num'] = -1
+
+        else:
+            u=userInfo[0]
+            u.user_password=request.GET.get('new_password')
+            u.save()
+            response['msg'] = 'succes111s'
+            response['error_num'] = 0
+    except Exception as e:
+        response['msg'] = str(e)
+        response['error_num'] = 1
+
+    return JsonResponse(response)

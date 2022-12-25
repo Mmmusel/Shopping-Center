@@ -127,16 +127,13 @@ export default {
   data () {
     return {
       excelParseData:[],
+
       itemsPerPageArray: [4, 8, 12],
       search: '',
-      filter: {},
-      sortDesc: false,
       page: 1,
       itemsPerPage: 4,
-      keys: [
-        '库存',
-        '金额',
-      ],
+
+
       productsList:[],
       items:[
         {
@@ -151,9 +148,7 @@ export default {
     numberOfPages () {
       return Math.ceil(this.productsList.length / this.itemsPerPage)
     },
-    filteredKeys () {
-      return this.keys.filter(key => key !== `Name`)
-    },
+
 
   },
   methods: {

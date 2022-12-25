@@ -64,6 +64,13 @@ export default new Router({
             },
             component: (resolve) => require(['../view/manager/data_card.vue'], resolve)
         },
+                {
+            path: '/testt',
+            meta: {
+                title: '购物车'
+            },
+            component: (resolve) => require(['../view/manager/page_user_log.vue'], resolve)
+        },
         {
             path: '/cart',
             meta: {
@@ -114,11 +121,11 @@ export default new Router({
                 },
                 {
                     path : 'log',
-                    component: () => import('@/view/manager/user_log')
+                    component: (resolve) => require(['../view/manager/page_user_log.vue'], resolve)
                 },
                 {
                     path : 'actionlog',
-                    component: () => import('@/view/manager/user_action')
+                    component: () => import('@/view/manager/page_user_action')
                 },
 
             ]},

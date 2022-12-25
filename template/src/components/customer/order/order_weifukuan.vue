@@ -73,6 +73,7 @@ export default {
 
     RegionText
   },
+
   data: () => ({
     items: [
       {color: '#2196F3', name: 'lzh', address: '北京', dingdan:'111'},

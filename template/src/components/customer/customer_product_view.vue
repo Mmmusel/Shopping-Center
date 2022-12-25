@@ -14,11 +14,7 @@
         <div class="product-cost">商品颜色：{{product.fields.product_color}}</div>
 
         <div class="product-add-cart" @click="handleAddCart">加入购物车</div>
-      </div>
-
-
-
-      <div>
+         <div>
         <span class="fillheart" v-if="begood" @click="changeGood">
             <font-awesome-icon :icon="['fas', 'heart']" class="icon righticon" ></font-awesome-icon>
         </span>
@@ -29,6 +25,11 @@
 
         <span class="word">{{product_goods}}</span>
     </div>
+      </div>
+
+
+
+
 
       </div>
     <div class="product-desc">

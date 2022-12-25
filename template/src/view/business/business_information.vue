@@ -235,7 +235,7 @@ import GeoPattern from "geopattern";
 import {
   //getAccessLogsByUserId,
   //saveUserProfile,
-  updatePassword,
+
 } from "@/api/user";
 
 //import AvatarUpload from "@/components/business/AvatarUpload";
@@ -253,6 +253,7 @@ export default {
   data() {
     return {
       //alert: false,
+      res:true,
       showImage:"",
       region:{
         province: '350000',
@@ -466,6 +467,36 @@ export default {
         //formData.append('user_id',this.$store.state.userId)
         //formData.append('forms',JSON.stringify(this.profileForm))
 
+        if(this.profileForm.user_name==''){
+          window.alert('请完善用户名')
+          return
+        }else if(this.profileForm.user_mobile==''){
+          window.alert('请完善手机号码')
+          return
+        }else if(this.profileForm.user_address==''){
+          window.alert('请完善详细地址')
+          return
+        }else if(!this.region.area){
+          window.alert('请完善地址')
+          return
+        }else if(!this.region.province){
+          window.alert('请完善地址')
+          return
+        }else if(!this.region.city){
+          window.alert('请完善地址')
+          return
+        }else if(this.region.area===''){
+          window.alert('请完善地址')
+          return
+        }else if(this.region.province===''){
+          window.alert('请完善地址')
+          return
+        }else if(this.region.city===''){
+          window.alert('请完善地址')
+          return
+        }
+
+
 
 
         const json = JSON.stringify(this.profileForm);
@@ -539,14 +570,36 @@ export default {
       console.log(data)
     },
 
-    passwordUpate() {
-      if (this.$refs.passwordForm.validate()) {
-        updatePassword(this.passwordForm).catch((err) => {
-          this.$toast.success(err.message, {
-            position: "top-center",
-          });
-        });
+    async passwordUpate() {
+      if (this.passwordForm.newPassword!==this.passwordForm.confirmPassword) {
+       window.alert('请保持密码一致')
       }
+      if (this.passwordForm.newPassword=="") {
+       window.alert('密码不能为空')
+      }
+
+      await this.axios.get('edit_password/',
+                {params:{old_password: this.passwordForm.oldPassword,
+                    new_password:this.passwordForm.newPassword
+                  ,user_id:this.$store.state.userId}})
+              .catch(function (error) {
+                  console.log(error);
+                  this.res=false
+                window.alert('请重新确认原密码')
+              })
+              .then((response) => {
+                if(response.data.error_num!==0){
+                  this.res=false
+                  console.log(response.data.msg);
+                  window.alert('请重新确认原密码')
+                  return
+                }
+                window.alert('密码修改成功')
+
+                this.res=true
+              })
+              ;
+
     },
 
     checkaddr() {

@@ -39,6 +39,7 @@ urlpatterns = [
     path('edit_userInfo/',BookView.edit_userInfo),
     path('userId2userName/',BookView.userId2userName),
     path('search_usertype/',BookView.search_usertype),
+    path('edit_password/',BookView.edit_password),
 
     path('add_product/', BookView.add_product),
     path('show_products/',BookView.show_products),

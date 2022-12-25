@@ -21,7 +21,7 @@ def get_users(request):
 def get_check(request):
     response = {}
     try:
-        o=CheckProduct.objects.filter(product_status=request.GET.get('product_status')).filter(check_status=request.GET.get('check_status'))
+        o=CheckProduct.objects.filter(product_status=request.GET.get('product_status')).filter(check_status=request.GET.get('check_status')).order_by('-checktime')
         response['list']=json.loads(serializers.serialize("json", o))
         response['msg'] = 'succes111s'
         response['error_num'] = 0
@@ -34,7 +34,7 @@ def get_check(request):
 def get_has_check(request):
     response = {}
     try:
-        o=CheckProduct.objects.filter(check_status=request.GET.get('check_status'))
+        o=CheckProduct.objects.filter(check_status=request.GET.get('check_status')).order_by('-checktime')
         response['list']=json.loads(serializers.serialize("json", o))
         response['msg'] = 'succes111s'
         response['error_num'] = 0
@@ -135,7 +135,7 @@ def add_log(request):
 def get_user_log(request):
     response = {}
     try:
-        o=UserLog.objects.filter()
+        o=UserLog.objects.order_by('-log_time')
         response['list']=json.loads(serializers.serialize("json", o))
         response['msg'] = 'succes111s'
         response['error_num'] = 0
@@ -148,7 +148,7 @@ def get_user_log(request):
 def get_user_action_log(request):
     response = {}
     try:
-        o=UserActionLog.objects.filter()
+        o=UserActionLog.objects.order_by('-action_time')
         response['list']=json.loads(serializers.serialize("json", o))
         response['msg'] = 'succes111s'
         response['error_num'] = 0

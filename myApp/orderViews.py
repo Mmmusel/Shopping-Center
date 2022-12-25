@@ -53,7 +53,7 @@ def show_business_orderProduct(request):
     try:
         #所有订单
         o1 = UserInfo.objects.get(id=request.GET.get('business_id'))
-        orderIds = OrderInfo.objects.filter(business_id=o1).order_by('order_createtime')
+        orderIds = OrderInfo.objects.filter(business_id=o1).order_by('-order_createtime')
 
         #商家的所有订单 涉及到的用户头像
         userAvatar=[]
@@ -88,7 +88,7 @@ def show_business_orderProduct_status(request):
     try:
         #所有订单
         o1 = UserInfo.objects.get(id=request.GET.get('business_id'))
-        orderIds = OrderInfo.objects.filter(business_id=o1).filter(order_status=request.GET.get('status')).order_by('order_createtime')
+        orderIds = OrderInfo.objects.filter(business_id=o1).filter(order_status=request.GET.get('status')).order_by('-order_createtime')
 
         #商家的所有订单 涉及到的用户头像
         userAvatar=[]
@@ -123,7 +123,7 @@ def show_customer_orderProduct_status(request):
     try:
         #所有订单
         o1 = UserInfo.objects.get(id=request.GET.get('business_id'))
-        orderIds = OrderInfo.objects.filter(customer_id=o1).filter(order_status=request.GET.get('status')).order_by('order_createtime')
+        orderIds = OrderInfo.objects.filter(customer_id=o1).filter(order_status=request.GET.get('status')).order_by('-order_createtime')
 
         #商家的所有订单 涉及到的用户头像
         userAvatar=[]
