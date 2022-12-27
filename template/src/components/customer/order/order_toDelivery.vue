@@ -2,7 +2,7 @@
   <v-expansion-panels focusable multiple popout>
     <v-expansion-panel
         v-for="item in business_orders"
-        :key="item.fields.customer_name"
+        :key="item.pk"
     >
       <v-expansion-panel-header>
         <!--蓝底头像+用户名-->

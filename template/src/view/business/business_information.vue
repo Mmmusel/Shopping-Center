@@ -90,7 +90,7 @@
                         <v-row>
                           <v-card>
                             <v-col>
-                              收货地址
+                              详细地址
                               <region-selects
 
 
