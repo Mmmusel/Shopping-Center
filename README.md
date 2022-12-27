@@ -10,3 +10,7 @@ npm install
 
 npm run build
 
+### 项目参考
+https://blog.csdn.net/sinat_36141399/article/details/108334060
+
+https://www.liujiangblog.com/course/django/95
